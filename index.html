@@ -73,6 +73,31 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .lu-name{font-size:30px;font-weight:800;}
 .lu-close{font-family:var(--mono);font-size:10px;color:var(--text3);cursor:pointer;text-decoration:underline;margin-top:.5rem;}
 
+/* ── ACHIEVEMENT BADGE ── */
+.ach-badge{position:fixed;top:1.5rem;right:1.5rem;z-index:8500;background:linear-gradient(135deg,var(--bg2),var(--bg3));border:1px solid var(--accent);border-radius:12px;padding:1rem;display:flex;flex-direction:column;gap:.5rem;min-width:260px;transform:translateX(120%);opacity:0;transition:transform .5s cubic-bezier(.68,-.55,.265,1.55),opacity .3s;box-shadow:0 10px 40px rgba(0,229,160,0.15);}
+.ach-badge.show{transform:translateX(0);opacity:1;}
+.ach-header{display:flex;align-items:center;gap:.625rem;}
+.ach-icon{font-size:28px;}
+.ach-title{font-size:13px;font-weight:700;color:var(--accent);}
+.ach-desc{font-size:11px;color:var(--text2);line-height:1.5;}
+.ach-xp{font-family:var(--mono);font-size:9px;color:var(--amber);margin-top:.25rem;}
+
+/* ── TOOLTIPS ── */
+[data-tip]{position:relative;cursor:help;}
+[data-tip]::after{content:attr(data-tip);position:absolute;bottom:100%;left:50%;transform:translateX(-50%) translateY(-6px);background:var(--bg2);border:1px solid var(--borderS);border-radius:6px;padding:.4rem .625rem;font-size:10px;color:var(--text);white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .15s,transform .15s;z-index:1000;box-shadow:0 4px 12px rgba(0,0,0,0.3);}
+[data-tip]:hover::after{opacity:1;transform:translateX(-50%) translateY(-2px);}
+[data-tip]::before{content:'';position:absolute;bottom:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:var(--borderS);opacity:0;pointer-events:none;transition:opacity .15s;z-index:1000;}
+[data-tip]:hover::before{opacity:1;}
+
+/* ── MINI QUIZ MODE ── */
+.quiz-mode{background:rgba(139,92,246,0.05)!important;border-color:rgba(139,92,246,0.3)!important;}
+.quiz-timer{height:3px;background:var(--bg);border-radius:3px;overflow:hidden;margin-top:.5rem;}
+.quiz-time-bar{height:100%;background:var(--purple);border-radius:3px;transition:width 1s linear;}
+.quiz-stats{display:flex;gap:1rem;justify-content:center;margin-top:.75rem;font-family:var(--mono);font-size:10px;}
+.qs-item{display:flex;flex-direction:column;align-items:center;}
+.qs-val{font-size:16px;font-weight:700;color:var(--text);}
+.qs-lbl{color:var(--text3);}
+
 /* ── DAILY PLAN ── */
 .week-tabs{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1rem;}
 .wtab{font-family:var(--mono);font-size:10px;padding:.3rem .625rem;border-radius:5px;border:1px solid var(--border);background:none;color:var(--text3);cursor:pointer;transition:all .12s;}
@@ -355,6 +380,7 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
     <a class="nav-link" href="#errordecoder"><span class="nav-dot"></span>Error decoder</a>
     <a class="nav-link" href="#resumebuilder"><span class="nav-dot"></span>Resume builder</a>
     <a class="nav-link" href="#standup"><span class="nav-dot"></span>Standup log</a>
+    <a class="nav-link" href="#quizmode" onclick="openQuiz();return false;"><span class="nav-dot"></span>⚡ Quick Quiz</a>
     <div class="nav-sec">Clarity</div>
     <a class="nav-link" href="#daily"><span class="nav-dot"></span>Daily plan</a>
     <a class="nav-link" href="#why"><span class="nav-dot"></span>Why it matters</a>
@@ -741,6 +767,24 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
   <span id="foot-pct" style="color:var(--accent);">0% complete</span>
 </footer>
 
+<!-- ACHIEVEMENT BADGE -->
+<div class="ach-badge" id="ach-badge">
+  <div class="ach-header"><span class="ach-icon" id="ach-icon">🏆</span><span class="ach-title" id="ach-title">Achievement Unlocked!</span></div>
+  <div class="ach-desc" id="ach-desc">You completed your first task</div>
+  <div class="ach-xp" id="ach-xp">+10 XP</div>
+</div>
+
+<!-- QUICK QUIZ MODAL -->
+<div class="lu-overlay" id="quiz-overlay">
+  <div class="lu-icon">🧠</div>
+  <div class="lu-title">Quick Quiz Mode</div>
+  <div class="lu-name" id="quiz-question" style="font-size:16px;max-width:400px;text-align:center;line-height:1.5;"></div>
+  <div class="quiz-stats" id="quiz-stats"></div>
+  <div style="display:flex;gap:.5rem;margin-top:1rem;flex-wrap:wrap;justify-content:center;" id="quiz-options"></div>
+  <div class="quiz-timer" style="width:100%;max-width:400px;margin-top:1rem;"><div class="quiz-time-bar" id="quiz-timer-bar"></div></div>
+  <div class="lu-close" onclick="closeQuiz()">Close quiz (ESC)</div>
+</div>
+
 <script>
 // ═══ DATA ═══
 const RANKS=[
@@ -852,6 +896,25 @@ const FLASHCARDS=[
   {q:'What is the ros2 service call syntax?',a:'ros2 service call /service_name pkg/srv/Type "{field: value}" — example: ros2 service call /calculate calculator_interfaces/srv/Calculator "{a: 5.0, b: 3.0, op: 0}" — note the YAML-style data in curly braces.'},
   {q:'What is cv_bridge?',a:'Converts between ROS Image messages (sensor_msgs/msg/Image) and OpenCV Mat objects. import cv_bridge; bridge = CvBridge(); cv_image = bridge.imgmsg_to_cv2(msg). Required for any computer vision node.'},
   {q:'What is the Nav2 global vs local planner?',a:'Global planner computes the full path from start to goal using the global costmap (NavFn, Smac). Local planner controls velocity in real-time to follow that path while avoiding nearby obstacles (DWB, TEB, RPP).'},
+];
+
+// ═══ QUIZ QUESTIONS ═══
+const QUIZ_QUESTIONS=[
+  {q:'Which ROS2 communication pattern is best for continuous sensor data?',options:['Service','Topic','Action','Parameter'],correct:1,explain:'Topics use async pub/sub, perfect for streaming data like LiDAR, camera, IMU.'},
+  {q:'What happens when QoS policies mismatch between publisher and subscriber?',options:['Messages arrive slower','ROS2 auto-fixes it','Silent communication failure','System crashes'],correct:2,explain:'QoS mismatch causes silent failure — no errors, just no messages received.'},
+  {q:'Which component tracks coordinate frame relationships in ROS2?',options:['URDF','TF2','Gazebo','costmap_2d'],correct:1,explain:'TF2 maintains the transform tree linking all coordinate frames over time.'},
+  {q:'What is the main advantage of Actions over Services?',options:['Faster execution','Less code','Feedback during execution','Better error handling'],correct:2,explain:'Actions provide periodic feedback, goal preemption, and final results for long-running tasks.'},
+  {q:'Which tool would you use to visualize node connections?',options:['RViz2','rqt_graph','ros2 doctor','colcon'],correct:1,explain:'rqt_graph shows the live computation graph with all nodes and topic connections.'},
+  {q:'What does NAV2 use for decision-making?',options:['Finite state machine','Behavior trees','Neural networks','Rule engine'],correct:1,explain:'Nav2 uses Behavior Trees (BT Navigator) for flexible, composable navigation behaviors.'},
+  {q:'Which build tool does ROS2 use?',options:['catkin_make','colcon','cmake only','ament_build'],correct:1,explain:'colcon is the standard ROS2 build tool, replacing catkin_make from ROS1.'},
+  {q:'What is the purpose of URDF?',options:['Build configuration','Robot geometry description','Network settings','Launch parameters'],correct:1,explain:'URDF describes robot bodies (links), joints, mass properties, and collision shapes.'},
+  {q:'Which QoS setting is best for sensor data?',options:['KEEP_ALL + RELIABLE','KEEP_LAST(1) + BEST_EFFORT','KEEP_ALL + BEST_EFFORT','KEEP_LAST(100) + RELIABLE'],correct:1,explain:'KEEP_LAST(1) + BEST_EFFORT ensures you get the latest data without blocking on lost packets.'},
+  {q:'What does SLAM stand for?',options:['Sensor Localization And Mapping','Simultaneous Localization And Mapping','Simple Laser And Mapping','Spatial Location And Measurement'],correct:1,explain:'SLAM = Simultaneous Localization And Mapping — building a map while tracking position within it.'},
+  {q:'Which client library is used for production ROS2 code?',options:['rclpy','rclcpp','rclc','rcljava'],correct:1,explain:'rclcpp (C++) is preferred for production due to performance and real-time capabilities.'},
+  {q:'What is ros2 bag used for?',options:['Package management','Recording and replaying topics','Building workspaces','Launching nodes'],correct:1,explain:'ros2 bag records topic data to files for later playback — essential for debugging and datasets.'},
+  {q:'Which Nav2 component handles obstacle avoidance?',options:['AMCL','costmap_2d','BT Navigator','SLAM Toolbox'],correct:1,explain:'costmap_2d creates occupancy grids showing obstacle locations and costs for path planning.'},
+  {q:'What is the default DDS implementation in ROS2 Humble?',options:['CycloneDDS','Fast-DDS','OpenDDS','Connext'],correct:1,explain:'Fast-RTPS/Fast-DDS is the default RMW implementation, though CycloneDDS is also popular.'},
+  {q:'How do you call a ROS2 service from the command line?',options:['ros2 service call','ros2 run service','ros2 topic echo','ros2 action send'],correct:0,explain:'ros2 service call /service_name package/srv/Type "{params}" calls a service with arguments.'},
 ];
 const SNIPPETS=[
   {title:'Python publisher',cat:'Publisher',lang:'python',sub:'Publish to a topic every 0.5s',code:`import rclpy
@@ -1279,6 +1342,7 @@ function checkLevelUp(prevSize){
     document.getElementById('lu-xp').textContent=r.min+' XP — '+r.desc;
     document.getElementById('lu-overlay').classList.add('show');
     fireConfetti();
+    showAchievement(r.icon,'New Rank Unlocked!',r.name,50);
   }
 }
 
@@ -1304,7 +1368,7 @@ function renderDays(){
 function selWeek(n){curWeek=n;renderWeekTabs();renderDays();}
 function toggleDay(id){
   const prev=done.size;
-  if(done.has(id))done.delete(id);else{done.add(id);checkLevelUp(prev);}
+  if(done.has(id))done.delete(id);else{done.add(id);checkLevelUp(prev);showAchievement('✅','Task Complete!','Great progress on your ROS2 journey',10);}
   saveState();renderDays();updateRankUI();
   const task=WEEKS.flatMap(w=>w.days).find(d=>d.id===id);
   if(!done.has(id))return;
@@ -1737,6 +1801,62 @@ function onScroll(){
 }
 window.addEventListener('scroll',onScroll,{passive:true});
 
+// ═══ ACHIEVEMENT BADGE ═══
+let achTimeout=null;
+function showAchievement(icon,title,desc,xp){
+  const badge=document.getElementById('ach-badge');
+  document.getElementById('ach-icon').textContent=icon;
+  document.getElementById('ach-title').textContent=title;
+  document.getElementById('ach-desc').textContent=desc;
+  document.getElementById('ach-xp').textContent='+'+xp+' XP';
+  badge.classList.add('show');
+  clearTimeout(achTimeout);
+  achTimeout=setTimeout(()=>badge.classList.remove('show'),4000);
+}
+
+// ═══ QUIZ MODE ═══
+let quizIdx=0,quizScore=0,quizTotal=0,quizTimerInt=null,quizTimeLeft=30;
+function openQuiz(){
+  document.getElementById('quiz-overlay').classList.add('show');
+  document.body.classList.add('quiz-mode');
+  quizIdx=0;quizScore=0;quizTotal=QUIZ_QUESTIONS.length;
+  loadQuizQuestion();
+}
+function closeQuiz(){
+  document.getElementById('quiz-overlay').classList.remove('show');
+  document.body.classList.remove('quiz-mode');
+  clearInterval(quizTimerInt);
+}
+function loadQuizQuestion(){
+  if(quizIdx>=QUIZ_QUESTIONS.length){endQuiz();return;}
+  const q=QUIZ_QUESTIONS[quizIdx];
+  document.getElementById('quiz-question').innerHTML=q.q;
+  document.getElementById('quiz-stats').innerHTML=`<div class="qs-item"><div class="qs-val">${quizIdx+1}/${quizTotal}</div><div class="qs-lbl">Question</div></div><div class="qs-item"><div class="qs-val" style="color:var(--accent)">${quizScore}</div><div class="qs-lbl">Correct</div></div>`;
+  document.getElementById('quiz-options').innerHTML=q.options.map((opt,i)=>`<button class="gbtn" onclick="answerQuiz(${i})" data-tip="${q.explain}">${opt}</button>`).join('');
+  quizTimeLeft=30;
+  document.getElementById('quiz-timer-bar').style.width='100%';
+  clearInterval(quizTimerInt);
+  quizTimerInt=setInterval(()=>{quizTimeLeft--;document.getElementById('quiz-timer-bar').style.width=(quizTimeLeft/30*100)+'%';if(quizTimeLeft<=0){answerQuiz(-1);}},1000);
+}
+function answerQuiz(selected){
+  clearInterval(quizTimerInt);
+  const q=QUIZ_QUESTIONS[quizIdx];
+  const isCorrect=selected===q.correct;
+  if(isCorrect){quizScore++;fireConfetti();showAchievement('⭐','Correct!',q.explain,5);}
+  else{showAchievement('💡','Learn',q.explain,0);}
+  quizIdx++;
+  setTimeout(loadQuizQuestion,1500);
+}
+function endQuiz(){
+  clearInterval(quizTimerInt);
+  const pct=Math.round(quizScore/quizTotal*100);
+  document.getElementById('quiz-question').innerHTML=`🎉 Quiz Complete!<br><span style="font-size:24px;font-weight:700;color:var(--accent);margin-top:.5rem;display:block;">${quizScore}/${quizTotal} (${pct}%)</span>`;
+  document.getElementById('quiz-stats').innerHTML='';
+  document.getElementById('quiz-options').innerHTML=`<button class="gbtn" onclick="openQuiz()">Retry</button><button class="gbtn" onclick="closeQuiz()">Close</button>`;
+  document.getElementById('quiz-timer-bar').style.width='0%';
+  if(pct>=80){showAchievement('🏆','Quiz Master!','You scored '+pct+'% — ROS2 knowledge locked in!',20);fireConfetti();}
+}
+
 // ═══ INIT ═══
 document.addEventListener('DOMContentLoaded',()=>{
   loadState();
@@ -1747,7 +1867,8 @@ document.addEventListener('DOMContentLoaded',()=>{
   onScroll();
   document.getElementById('coach-inp')?.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendCoach();}});
   document.getElementById('lu-overlay')?.addEventListener('click',()=>document.getElementById('lu-overlay').classList.remove('show'));
-  document.addEventListener('keydown',e=>{if(e.key==='/'&&document.activeElement.tagName!=='INPUT'&&document.activeElement.tagName!=='TEXTAREA'){e.preventDefault();document.getElementById('term-inp')?.focus();}});
+  document.getElementById('quiz-overlay')?.addEventListener('click',(e)=>{if(e.target.id==='quiz-overlay')closeQuiz();});
+  document.addEventListener('keydown',e=>{if(e.key==='/'&&document.activeElement.tagName!=='INPUT'&&document.activeElement.tagName!=='TEXTAREA'){e.preventDefault();document.getElementById('term-inp')?.focus();}if(e.key==='Escape'){closeQuiz();}});
   setTimeout(()=>document.querySelectorAll('.reveal').forEach(el=>el.classList.add('visible')),80);
 });
 </script>
