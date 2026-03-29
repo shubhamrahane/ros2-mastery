@@ -1,0 +1,1755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ROS2 Mastery — Shubham's Legendary Blueprint</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Syne:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0c0f;--bg2:#111418;--bg3:#181d24;--border:rgba(255,255,255,0.07);--borderS:rgba(255,255,255,0.14);--text:#e8eaed;--text2:#8a9ab0;--text3:#4a5568;--accent:#00e5a0;--blue:#60a5fa;--amber:#f59e0b;--purple:#8b5cf6;--red:#ef4444;--coral:#ff6b35;--rank-color:#4a5568;--mono:'JetBrains Mono',monospace;--sans:'Syne',sans-serif;}
+*{box-sizing:border-box;margin:0;padding:0;}html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.025) 2px,rgba(0,0,0,0.025) 4px);pointer-events:none;z-index:0;}
+
+/* ── SIDEBAR ── */
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:224px;background:var(--bg2);border-right:1px solid var(--border);z-index:100;display:flex;flex-direction:column;}
+.sb-logo{padding:1.25rem 1.25rem .875rem;border-bottom:1px solid var(--border);}
+.logo-tag{font-family:var(--mono);font-size:9px;color:var(--accent);letter-spacing:.14em;text-transform:uppercase;margin-bottom:3px;}
+.sb-logo h1{font-size:17px;font-weight:800;line-height:1.2;}
+.sb-logo .sub{font-family:var(--mono);font-size:9px;color:var(--text3);margin-top:3px;}
+.rank-badge{display:flex;align-items:center;gap:8px;margin-top:.625rem;padding:.5rem .625rem;background:var(--bg3);border-radius:8px;border:1px solid var(--border);}
+.rank-icon{font-size:16px;flex-shrink:0;}
+.rank-name{font-size:11px;font-weight:700;color:var(--rank-color);transition:color .5s;}
+.rank-xp{font-family:var(--mono);font-size:9px;color:var(--text3);}
+.xp-bg{height:2px;background:var(--bg);border-radius:1px;overflow:hidden;margin-top:3px;}
+.xp-fill{height:100%;background:var(--rank-color);border-radius:1px;transition:width .5s,background .5s;}
+.nav-sec{padding:.5rem 1rem .15rem;font-family:var(--mono);font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--text3);}
+.nav-links{flex:1;overflow-y:auto;padding:.15rem 0;}
+.nav-link{display:flex;align-items:center;gap:8px;padding:.4rem 1.25rem;font-size:11px;font-weight:500;color:var(--text2);cursor:pointer;transition:all .12s;border-left:2px solid transparent;text-decoration:none;}
+.nav-link:hover{color:var(--text);background:rgba(255,255,255,0.025);}
+.nav-link.active{color:var(--accent);border-left-color:var(--accent);background:rgba(0,229,160,0.05);}
+.nav-dot{width:4px;height:4px;border-radius:50%;background:currentColor;opacity:.5;flex-shrink:0;}
+.nav-link.active .nav-dot{opacity:1;}
+.nav-badge{font-family:var(--mono);font-size:9px;padding:1px 5px;border-radius:8px;background:rgba(0,229,160,0.15);color:var(--accent);margin-left:auto;}
+.sb-foot{padding:.625rem 1.25rem;border-top:1px solid var(--border);font-family:var(--mono);font-size:9px;color:var(--text3);}
+.prog-bar{height:2px;background:var(--bg3);border-radius:1px;overflow:hidden;margin-top:3px;}
+.prog-fill{height:100%;background:var(--accent);border-radius:1px;transition:width .5s;}
+
+/* ── MAIN ── */
+.main{margin-left:224px;position:relative;z-index:1;}
+.section{min-height:100vh;padding:3rem 2.5rem;border-bottom:1px solid var(--border);}
+.section-num{font-family:var(--mono);font-size:10px;color:var(--accent);letter-spacing:.1em;margin-bottom:.4rem;}
+.section-title{font-size:26px;font-weight:800;line-height:1.2;}
+.section-sub{font-size:13px;color:var(--text2);margin-top:.4rem;line-height:1.6;}
+.section-header{margin-bottom:1.75rem;}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.25rem;}
+.card-sm{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:.75rem .875rem;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;}
+
+/* ── TAGS ── */
+.tag{display:inline-block;font-family:var(--mono);font-size:9px;padding:2px 7px;border-radius:4px;font-weight:500;}
+.tg{background:rgba(0,229,160,0.1);color:var(--accent);border:1px solid rgba(0,229,160,0.2);}
+.tb{background:rgba(96,165,250,0.1);color:var(--blue);border:1px solid rgba(96,165,250,0.2);}
+.ta{background:rgba(245,158,11,0.1);color:var(--amber);border:1px solid rgba(245,158,11,0.2);}
+.tp{background:rgba(139,92,246,0.1);color:var(--purple);border:1px solid rgba(139,92,246,0.2);}
+.tc{background:rgba(255,107,53,0.1);color:var(--coral);border:1px solid rgba(255,107,53,0.2);}
+.tr{background:rgba(239,68,68,0.1);color:var(--red);border:1px solid rgba(239,68,68,0.2);}
+.tgr{background:rgba(255,255,255,0.04);color:var(--text2);border:1px solid var(--border);}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:1.5rem;right:1.5rem;z-index:8000;background:var(--bg2);border:1px solid var(--borderS);border-radius:10px;padding:.75rem 1rem;display:flex;align-items:center;gap:10px;font-size:12px;transform:translateY(70px);opacity:0;transition:transform .3s,opacity .3s;min-width:240px;}
+.toast.show{transform:translateY(0);opacity:1;}
+.toast strong{display:block;font-weight:700;margin-bottom:1px;}
+.toast span{font-size:10px;color:var(--text3);font-family:var(--mono);}
+#confetti-canvas{position:fixed;inset:0;pointer-events:none;z-index:9000;}
+.lu-overlay{position:fixed;inset:0;z-index:9500;background:rgba(0,0,0,.88);display:none;align-items:center;justify-content:center;flex-direction:column;gap:.75rem;backdrop-filter:blur(20px);}
+.lu-overlay.show{display:flex;}
+@keyframes pop{0%{transform:scale(.4);opacity:0;}70%{transform:scale(1.08);}100%{transform:scale(1);opacity:1;}}
+.lu-overlay.show .lu-icon{animation:pop .45s ease both;}
+.lu-overlay.show .lu-name{animation:pop .45s ease .12s both;}
+.lu-icon{font-size:64px;}
+.lu-title{font-family:var(--mono);font-size:11px;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;}
+.lu-name{font-size:30px;font-weight:800;}
+.lu-close{font-family:var(--mono);font-size:10px;color:var(--text3);cursor:pointer;text-decoration:underline;margin-top:.5rem;}
+
+/* ── DAILY PLAN ── */
+.week-tabs{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1rem;}
+.wtab{font-family:var(--mono);font-size:10px;padding:.3rem .625rem;border-radius:5px;border:1px solid var(--border);background:none;color:var(--text3);cursor:pointer;transition:all .12s;}
+.wtab:hover{border-color:var(--borderS);color:var(--text2);}
+.wtab.active{background:rgba(0,229,160,0.1);border-color:rgba(0,229,160,0.3);color:var(--accent);}
+.pbar-bg{height:3px;background:var(--bg3);border-radius:3px;overflow:hidden;}
+.pbar-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .4s;}
+.day-item{display:flex;align-items:flex-start;gap:.75rem;padding:.875rem;border:1px solid var(--border);border-radius:9px;margin-bottom:.4rem;cursor:pointer;transition:border-color .15s,background .15s;}
+.day-item:hover{border-color:var(--borderS);background:rgba(255,255,255,0.015);}
+.day-item.done{background:rgba(0,229,160,0.03);border-color:rgba(0,229,160,0.15);}
+.day-cb{width:17px;height:17px;border-radius:4px;border:1.5px solid var(--borderS);flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;transition:background .15s,border-color .15s;}
+.day-item.done .day-cb{background:var(--accent);border-color:var(--accent);}
+.chk{opacity:0;transition:opacity .15s;}
+.day-item.done .chk{opacity:1;}
+.day-lbl{font-family:var(--mono);font-size:10px;color:var(--text3);flex-shrink:0;width:26px;padding-top:2px;}
+.day-task{font-size:12px;font-weight:700;}
+.day-item.done .day-task{color:var(--text3);text-decoration:line-through;}
+.day-info{font-size:10px;color:var(--text3);margin-top:2px;line-height:1.5;font-family:var(--mono);}
+.xp-pill{font-family:var(--mono);font-size:8px;padding:1px 5px;border-radius:8px;background:rgba(0,229,160,0.1);color:var(--accent);border:1px solid rgba(0,229,160,0.2);margin-left:5px;}
+
+/* ── TERMINAL ── */
+.terminal{background:#0d1117;border:1px solid var(--border);border-radius:12px;overflow:hidden;font-family:var(--mono);}
+.term-hdr{background:#161b22;padding:.5rem .875rem;display:flex;align-items:center;gap:.5rem;border-bottom:1px solid rgba(255,255,255,0.05);}
+.tdot{width:11px;height:11px;border-radius:50%;}
+.term-body{padding:.875rem;height:340px;overflow-y:auto;font-size:11px;line-height:1.6;}
+.term-line{margin-bottom:1px;}
+.tp_{color:var(--accent);}
+.to_{color:var(--text2);}
+.to_g{color:#00e5a0;}.to_b{color:#60a5fa;}.to_a{color:#f59e0b;}.to_r{color:#ef4444;}.to_d{color:var(--text3);}
+.term-inp-row{display:flex;align-items:center;gap:6px;padding:.5rem .875rem;border-top:1px solid rgba(255,255,255,0.05);background:#161b22;position:relative;}
+.term-ps{color:var(--accent);font-family:var(--mono);font-size:11px;flex-shrink:0;}
+.term-inp{flex:1;background:none;border:none;outline:none;color:var(--text);font-family:var(--mono);font-size:11px;}
+.ac-box{position:absolute;bottom:100%;left:0;right:0;background:#161b22;border-top:1px solid var(--border);max-height:110px;overflow-y:auto;z-index:20;}
+.ac-item{padding:.3rem .875rem;font-family:var(--mono);font-size:10px;color:var(--text2);cursor:pointer;}
+.ac-item:hover,.ac-item.sel{background:rgba(0,229,160,0.08);color:var(--accent);}
+
+/* ── NODE GRAPH ── */
+#ngcanvas{width:100%;height:380px;background:var(--bg3);border:1px solid var(--border);border-radius:12px;position:relative;overflow:hidden;cursor:grab;}
+#ngcanvas:active{cursor:grabbing;}
+.gnode{position:absolute;background:var(--bg2);border:2px solid;border-radius:9px;padding:.4rem .75rem;cursor:grab;user-select:none;z-index:10;transition:box-shadow .15s;}
+.gnode:hover{box-shadow:0 0 18px rgba(0,229,160,0.15);}
+.gn-name{font-family:var(--mono);font-size:11px;font-weight:700;}
+.gn-type{font-family:var(--mono);font-size:8px;margin-top:1px;opacity:.55;}
+.graph-svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;}
+.gbtn{font-family:var(--mono);font-size:10px;padding:.3rem .625rem;border-radius:5px;border:1px solid var(--border);background:var(--bg3);color:var(--text2);cursor:pointer;transition:all .12s;}
+.gbtn:hover{border-color:var(--borderS);color:var(--text);}
+.gbtn.active{background:rgba(0,229,160,0.08);border-color:rgba(0,229,160,0.3);color:var(--accent);}
+
+/* ── INTERVIEW COACH ── */
+.coach-chat{background:#0d1117;border:1px solid var(--border);border-radius:12px;min-height:300px;max-height:440px;overflow-y:auto;padding:1rem;display:flex;flex-direction:column;gap:.75rem;}
+.cmsg{display:flex;gap:.625rem;align-items:flex-start;}
+.cmsg.user{flex-direction:row-reverse;}
+.cav{width:28px;height:28px;border-radius:7px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;}
+.cbubble{background:var(--bg3);border:1px solid var(--border);border-radius:9px;padding:.625rem .875rem;font-size:12px;line-height:1.65;max-width:82%;color:var(--text2);}
+.cmsg.user .cbubble{background:rgba(0,229,160,0.07);border-color:rgba(0,229,160,0.18);color:var(--text);}
+.cscore{display:inline-flex;align-items:center;gap:3px;font-family:var(--mono);font-size:9px;padding:2px 7px;border-radius:8px;margin-top:.4rem;}
+.coach-inp{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:9px;padding:.625rem .875rem;color:var(--text);font-family:var(--sans);font-size:12px;outline:none;resize:none;height:70px;transition:border-color .15s;}
+.coach-inp:focus{border-color:rgba(0,229,160,0.35);}
+.csend{background:var(--accent);border:none;border-radius:7px;padding:.5rem 1rem;color:#000;font-family:var(--sans);font-size:12px;font-weight:700;cursor:pointer;transition:filter .12s;align-self:flex-end;}
+.csend:hover{filter:brightness(1.1);}
+.csend:disabled{opacity:.45;cursor:not-allowed;}
+.topic-btn{font-family:var(--mono);font-size:10px;padding:.3rem .625rem;border-radius:5px;border:1px solid var(--border);background:var(--bg3);color:var(--text2);cursor:pointer;transition:all .12s;}
+.topic-btn:hover{border-color:var(--borderS);color:var(--text);}
+.topic-btn.sel{border-color:var(--accent);color:var(--accent);background:rgba(0,229,160,0.07);}
+@keyframes tdot{0%,60%,100%{transform:translateY(0);}30%{transform:translateY(-4px);}}
+.typing span{display:inline-block;width:4px;height:4px;border-radius:50%;background:var(--text3);animation:tdot 1.1s infinite;margin:0 1px;}
+.typing span:nth-child(2){animation-delay:.18s;}
+.typing span:nth-child(3){animation-delay:.36s;}
+.api-inp{background:var(--bg3);border:1px solid var(--border);border-radius:7px;padding:.4rem .75rem;color:var(--text);font-family:var(--mono);font-size:11px;outline:none;transition:border-color .15s;flex:1;}
+.api-inp:focus{border-color:rgba(0,229,160,0.3);}
+
+/* ── FLASHCARDS ── */
+.fc-wrap{perspective:800px;}
+.fc-card{width:100%;height:220px;position:relative;transform-style:preserve-3d;transition:transform .5s;cursor:pointer;}
+.fc-card.flipped{transform:rotateY(180deg);}
+.fc-face{position:absolute;inset:0;backface-visibility:hidden;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;text-align:center;}
+.fc-front{background:var(--bg2);border:1px solid var(--borderS);}
+.fc-back{background:var(--bg3);border:1px solid var(--border);transform:rotateY(180deg);}
+.fc-label{font-family:var(--mono);font-size:9px;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.75rem;}
+.fc-q{font-size:16px;font-weight:700;line-height:1.4;color:var(--text);}
+.fc-a{font-size:13px;line-height:1.65;color:var(--text2);}
+.fc-btns{display:flex;gap:.5rem;margin-top:1rem;justify-content:center;}
+.fc-btn{font-family:var(--mono);font-size:11px;padding:.4rem .875rem;border-radius:7px;border:1px solid;cursor:pointer;font-weight:500;transition:all .12s;}
+.fc-again{border-color:rgba(239,68,68,0.4);color:var(--red);background:rgba(239,68,68,0.07);}
+.fc-hard{border-color:rgba(245,158,11,0.4);color:var(--amber);background:rgba(245,158,11,0.07);}
+.fc-good{border-color:rgba(96,165,250,0.4);color:var(--blue);background:rgba(96,165,250,0.07);}
+.fc-easy{border-color:rgba(0,229,160,0.4);color:var(--accent);background:rgba(0,229,160,0.07);}
+.fc-btn:hover{filter:brightness(1.2);}
+.fc-meta{font-family:var(--mono);font-size:10px;color:var(--text3);display:flex;justify-content:space-between;margin-bottom:.75rem;}
+.fc-prog{font-family:var(--mono);font-size:10px;color:var(--text3);margin-top:.75rem;text-align:center;}
+
+/* ── SNIPPET LIBRARY ── */
+.snip-search{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:.5rem .875rem;color:var(--text);font-family:var(--sans);font-size:13px;outline:none;margin-bottom:1rem;transition:border-color .15s;}
+.snip-search:focus{border-color:rgba(0,229,160,0.3);}
+.snip-cats{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:1rem;}
+.snip-cat{font-family:var(--mono);font-size:10px;padding:.25rem .6rem;border-radius:4px;border:1px solid var(--border);background:none;color:var(--text3);cursor:pointer;transition:all .12s;}
+.snip-cat:hover{border-color:var(--borderS);color:var(--text2);}
+.snip-cat.active{background:rgba(0,229,160,0.08);border-color:rgba(0,229,160,0.3);color:var(--accent);}
+.snip-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;margin-bottom:.625rem;overflow:hidden;}
+.snip-head{display:flex;justify-content:space-between;align-items:center;padding:.625rem 1rem;}
+.snip-title{font-size:13px;font-weight:700;}
+.snip-subtitle{font-family:var(--mono);font-size:10px;color:var(--text3);margin-top:1px;}
+.snip-copy{font-family:var(--mono);font-size:10px;padding:.25rem .625rem;border-radius:5px;border:1px solid var(--border);background:var(--bg3);color:var(--accent);cursor:pointer;transition:all .12s;flex-shrink:0;}
+.snip-copy:hover{border-color:rgba(0,229,160,0.3);background:rgba(0,229,160,0.06);}
+.snip-code{background:#0d1117;padding:.75rem 1rem;font-family:var(--mono);font-size:10px;line-height:1.7;color:#c9d1d9;overflow-x:auto;display:none;border-top:1px solid rgba(255,255,255,0.05);}
+.snip-card.open .snip-code{display:block;}
+.snip-toggle{cursor:pointer;font-size:10px;color:var(--text3);}
+.kw{color:#ff7b72;}.fn{color:#d2a8ff;}.str{color:#a5d6ff;}.cm{color:#8b949e;}.num{color:#f2cc60;}
+
+/* ── ERROR DECODER ── */
+.err-inp{width:100%;background:#0d1117;border:1px solid var(--border);border-radius:9px;padding:.875rem;color:#c9d1d9;font-family:var(--mono);font-size:11px;outline:none;resize:vertical;min-height:120px;transition:border-color .15s;}
+.err-inp:focus{border-color:rgba(239,68,68,0.3);}
+.err-result{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:1.25rem;margin-top:.875rem;}
+.err-type{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:.5rem;}
+.err-what{font-size:14px;font-weight:700;margin-bottom:.5rem;}
+.err-cause{font-size:12px;color:var(--text2);line-height:1.6;margin-bottom:.625rem;}
+.err-fix-label{font-family:var(--mono);font-size:9px;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.4rem;}
+.err-fix{background:#0d1117;border-radius:7px;padding:.625rem .875rem;font-family:var(--mono);font-size:11px;color:#a5d6ff;line-height:1.65;}
+.err-decode-btn{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-radius:8px;padding:.5rem 1.25rem;color:var(--red);font-family:var(--mono);font-size:11px;cursor:pointer;transition:all .12s;margin-top:.625rem;}
+.err-decode-btn:hover{background:rgba(239,68,68,0.15);}
+.common-errors{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.625rem;}
+.err-chip{font-family:var(--mono);font-size:9px;padding:.2rem .5rem;border-radius:4px;border:1px solid rgba(239,68,68,0.2);background:rgba(239,68,68,0.05);color:var(--red);cursor:pointer;transition:all .12s;}
+.err-chip:hover{background:rgba(239,68,68,0.1);}
+
+/* ── RESUME BUILDER ── */
+.resume-proj{display:flex;align-items:flex-start;gap:.75rem;padding:.875rem;border:1px solid var(--border);border-radius:9px;margin-bottom:.5rem;}
+.resume-proj.completed{border-color:rgba(0,229,160,0.2);background:rgba(0,229,160,0.025);}
+.resume-proj.pending{opacity:.5;}
+.resume-status{font-family:var(--mono);font-size:11px;flex-shrink:0;margin-top:1px;}
+.resume-proj-title{font-size:13px;font-weight:700;margin-bottom:.25rem;}
+.resume-bullet{background:var(--bg3);border:1px solid var(--border);border-radius:7px;padding:.625rem .875rem;font-size:12px;color:var(--text2);line-height:1.6;margin-top:.4rem;font-family:var(--mono);}
+.copy-bullet{font-family:var(--mono);font-size:9px;padding:.2rem .5rem;border-radius:4px;border:1px solid var(--border);background:var(--bg3);color:var(--accent);cursor:pointer;transition:all .12s;margin-top:.35rem;display:inline-block;}
+.copy-bullet:hover{border-color:rgba(0,229,160,0.3);}
+.resume-summary-box{background:var(--bg3);border:1px solid rgba(0,229,160,0.2);border-radius:10px;padding:1rem;margin-top:1rem;}
+
+/* ── STANDUP LOG ── */
+.standup-inp{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:.5rem .875rem;color:var(--text);font-family:var(--sans);font-size:12px;outline:none;resize:none;transition:border-color .15s;line-height:1.5;}
+.standup-inp:focus{border-color:rgba(0,229,160,0.3);}
+.su-label{font-family:var(--mono);font-size:9px;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.35rem;display:flex;align-items:center;gap:.5rem;}
+.su-dot{width:6px;height:6px;border-radius:50%;}
+.standup-save{background:var(--accent);border:none;border-radius:7px;padding:.5rem 1.25rem;color:#000;font-family:var(--sans);font-size:12px;font-weight:700;cursor:pointer;transition:filter .12s;width:100%;margin-top:.75rem;}
+.standup-save:hover{filter:brightness(1.08);}
+.su-entry{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:1rem;margin-bottom:.5rem;}
+.su-date{font-family:var(--mono);font-size:9px;color:var(--text3);margin-bottom:.625rem;}
+.su-section{margin-bottom:.4rem;}
+.su-sec-label{font-family:var(--mono);font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;}
+.su-sec-val{font-size:12px;color:var(--text2);margin-top:2px;line-height:1.5;}
+.su-export{font-family:var(--mono);font-size:9px;padding:.25rem .625rem;border-radius:4px;border:1px solid var(--border);background:none;color:var(--text3);cursor:pointer;transition:all .12s;float:right;}
+.su-export:hover{color:var(--accent);border-color:rgba(0,229,160,0.3);}
+
+/* ── RADAR ── */
+.radar-legend{display:flex;gap:1rem;flex-wrap:wrap;margin-top:.75rem;font-family:var(--mono);font-size:10px;color:var(--text3);}
+.rl-item{display:flex;align-items:center;gap:5px;}
+.rl-dot{width:8px;height:8px;border-radius:50%;}
+
+/* ── RANKS ── */
+.rank-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:1rem;text-align:center;}
+.rank-card.current{border-color:var(--rank-color);}
+.rank-card.locked{opacity:.3;}
+
+/* ── GAP TABLE ── */
+.gap-table{width:100%;border-collapse:collapse;}
+.gap-table th{font-family:var(--mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);padding:.4rem .625rem;text-align:left;border-bottom:1px solid var(--border);}
+.gap-table td{padding:.5rem .625rem;border-bottom:1px solid var(--border);font-size:12px;vertical-align:middle;}
+.gap-table tr:last-child td{border-bottom:none;}
+.gap-bar-bg{width:90px;height:4px;background:var(--bg3);border-radius:2px;overflow:hidden;}
+.gap-bar-fill{height:100%;border-radius:2px;transition:width .8s;}
+
+/* ── WHY CARDS ── */
+.why-card{background:var(--bg2);border:1px solid var(--border);border-left-width:3px;border-radius:0 9px 9px 0;padding:.875rem 1rem;margin-bottom:.5rem;cursor:pointer;transition:transform .15s;}
+.why-card:hover{transform:translateX(3px);}
+.why-body{overflow:hidden;max-height:0;transition:max-height .3s;}
+.why-card.open .why-body{max-height:180px;}
+.why-chev{transition:transform .3s;}
+.why-card.open .why-chev{transform:rotate(180deg);}
+
+/* ── GITHUB ── */
+.hm{display:flex;gap:3px;flex-wrap:nowrap;overflow-x:auto;}
+.hm-col{display:flex;flex-direction:column;gap:3px;flex-shrink:0;}
+.hm-cell{width:10px;height:10px;border-radius:2px;background:var(--bg3);}
+.hm-cell.l1{background:rgba(0,229,160,0.18);}
+.hm-cell.l2{background:rgba(0,229,160,0.4);}
+.hm-cell.l3{background:rgba(0,229,160,0.65);}
+.hm-cell.l4{background:rgba(0,229,160,0.9);}
+.gh-inp{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:7px;padding:.4rem .75rem;color:var(--text);font-family:var(--mono);font-size:11px;outline:none;transition:border-color .15s;}
+.gh-inp:focus{border-color:rgba(0,229,160,0.3);}
+.gh-btn{background:var(--bg3);border:1px solid var(--border);border-radius:7px;padding:.4rem .875rem;color:var(--accent);font-family:var(--mono);font-size:11px;cursor:pointer;transition:all .12s;white-space:nowrap;}
+.gh-btn:hover{border-color:rgba(0,229,160,0.3);background:rgba(0,229,160,0.05);}
+
+/* STACK / ARCH / PROJ / CAREER / TIMELINE — minimal but complete */
+.arch-node{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:7px;padding:.5rem .625rem;text-align:center;transition:border-color .15s,transform .12s;cursor:pointer;}
+.arch-node:hover{border-color:var(--accent);transform:translateY(-1px);}
+.arch-bus{background:rgba(0,229,160,0.03);border:1px solid rgba(0,229,160,0.18);border-radius:7px;padding:.625rem .875rem;position:relative;overflow:hidden;}
+.dp{position:absolute;width:7px;height:7px;border-radius:50%;background:var(--accent);top:50%;margin-top:-3.5px;animation:pf 3s linear infinite;}
+@keyframes pf{from{left:-10px;opacity:0;}10%{opacity:1;}90%{opacity:1;}to{left:110%;opacity:0;}}
+.dp:nth-child(2){animation-delay:.9s;background:var(--blue);}
+.dp:nth-child(3){animation-delay:1.8s;background:var(--amber);}
+.stack-layer{border-radius:7px;padding:.75rem 1rem;margin-bottom:3px;display:flex;align-items:center;gap:.875rem;transition:transform .12s;cursor:pointer;}
+.stack-layer:hover{transform:translateX(3px);}
+.stack-label{font-size:11px;font-weight:700;min-width:150px;flex-shrink:0;}
+.stack-chips{display:flex;flex-wrap:wrap;gap:5px;}
+.proj-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:1rem;display:grid;grid-template-columns:32px 1fr auto;gap:.875rem;align-items:start;transition:border-color .15s,transform .15s;cursor:pointer;}
+.proj-card:hover{border-color:var(--borderS);transform:translateY(-2px);}
+.proj-num{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:12px;font-weight:700;flex-shrink:0;}
+.career-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:1rem;transition:transform .15s,border-color .15s;cursor:pointer;}
+.career-card:hover{transform:translateY(-2px);border-color:var(--borderS);}
+.tl-week{display:grid;grid-template-columns:56px 1fr 1fr 1fr 1fr;gap:.875rem;padding:1rem 0;border-bottom:1px solid var(--border);align-items:start;}
+.tl-week:last-child{border-bottom:none;}
+.tl-week.cur{background:rgba(0,229,160,0.025);border-radius:7px;padding:1rem .625rem;margin:0 -.625rem;}
+.wbadge{font-family:var(--mono);font-size:20px;font-weight:700;color:var(--text3);}
+.wbadge.cur{color:var(--accent);}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(14px);transition:opacity .45s,transform .45s;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+
+.footer{padding:1rem 2.5rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;color:var(--text3);}
+
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--bg3);border-radius:2px;}
+
+@media(max-width:860px){
+  .sidebar{transform:translateX(-100%);transition:transform .3s;}
+  .sidebar.open{transform:translateX(0);}
+  .main{margin-left:0;}
+  .section{padding:2rem 1rem;}
+  .grid2,.grid3{grid-template-columns:1fr;}
+  .tl-week{grid-template-columns:44px 1fr;}
+  .tl-week>*:nth-child(n+4){display:none;}
+}
+</style>
+</head>
+<body>
+<canvas id="confetti-canvas"></canvas>
+
+<div class="lu-overlay" id="lu-overlay" onclick="this.classList.remove('show')">
+  <div class="lu-title">RANK UP!</div>
+  <div class="lu-icon" id="lu-icon">🏆</div>
+  <div class="lu-name" id="lu-name">Nav2 Master</div>
+  <div style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-top:.35rem;" id="lu-xp"></div>
+  <div class="lu-close">tap anywhere to continue</div>
+</div>
+
+<div class="toast" id="toast">
+  <span id="toast-icon" style="font-size:18px;">⚡</span>
+  <div><strong id="toast-t">Done</strong><span id="toast-s">+10 XP</span></div>
+</div>
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sb-logo">
+    <div class="logo-tag">ROS2 Legendary</div>
+    <h1>Mastery<br>Roadmap</h1>
+    <div class="sub">Shubham · July 2025 target</div>
+    <div class="rank-badge">
+      <div class="rank-icon" id="sb-ri">🔰</div>
+      <div style="flex:1;min-width:0;">
+        <div class="rank-name" id="sb-rn">Node Newbie</div>
+        <div class="rank-xp" id="sb-rx">0 XP</div>
+        <div class="xp-bg"><div class="xp-fill" id="sb-xf" style="width:0%"></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="nav-links">
+    <div class="nav-sec">System</div>
+    <a class="nav-link" href="#arch"><span class="nav-dot"></span>Architecture</a>
+    <a class="nav-link" href="#stack"><span class="nav-dot"></span>Tech stack</a>
+    <div class="nav-sec">Learning</div>
+    <a class="nav-link" href="#timeline"><span class="nav-dot"></span>Timeline</a>
+    <a class="nav-link" href="#skills"><span class="nav-dot"></span>Skill tree</a>
+    <a class="nav-link" href="#projects"><span class="nav-dot"></span>Projects</a>
+    <div class="nav-sec">Interactive tools</div>
+    <a class="nav-link" href="#nodegraph"><span class="nav-dot"></span>Node graph</a>
+    <a class="nav-link" href="#terminal"><span class="nav-dot"></span>Terminal sim</a>
+    <a class="nav-link" href="#interview"><span class="nav-dot"></span>Interview coach</a>
+    <div class="nav-sec">New features</div>
+    <a class="nav-link" href="#flashcards"><span class="nav-dot"></span>Flashcards <span class="nav-badge" id="due-badge" style="display:none">0</span></a>
+    <a class="nav-link" href="#snippets"><span class="nav-dot"></span>Code snippets</a>
+    <a class="nav-link" href="#errordecoder"><span class="nav-dot"></span>Error decoder</a>
+    <a class="nav-link" href="#resumebuilder"><span class="nav-dot"></span>Resume builder</a>
+    <a class="nav-link" href="#standup"><span class="nav-dot"></span>Standup log</a>
+    <div class="nav-sec">Clarity</div>
+    <a class="nav-link" href="#daily"><span class="nav-dot"></span>Daily plan</a>
+    <a class="nav-link" href="#why"><span class="nav-dot"></span>Why it matters</a>
+    <a class="nav-link" href="#jobs"><span class="nav-dot"></span>Job gap + radar</a>
+    <div class="nav-sec">Career</div>
+    <a class="nav-link" href="#career"><span class="nav-dot"></span>Career map</a>
+    <a class="nav-link" href="#ranks"><span class="nav-dot"></span>XP ranks</a>
+    <a class="nav-link" href="#github"><span class="nav-dot"></span>GitHub streak</a>
+  </div>
+  <div class="sb-foot">
+    <div style="display:flex;justify-content:space-between;"><span>Progress</span><span id="sb-pct" style="color:var(--accent)">0%</span></div>
+    <div class="prog-bar"><div class="prog-fill" id="sb-bar" style="width:0%"></div></div>
+    <div style="margin-top:5px;">W3 → current &nbsp;·&nbsp; <kbd style="background:var(--bg3);border:1px solid var(--border);border-radius:2px;padding:1px 3px;font-size:8px;">/</kbd> terminal</div>
+  </div>
+</aside>
+
+<main class="main">
+
+<!-- 01 ARCH -->
+<section class="section" id="arch">
+  <div class="section-header reveal">
+    <div class="section-num">01 / system architecture</div>
+    <h2 class="section-title">How ROS2 actually works</h2>
+    <p class="section-sub">Hardware → driver nodes → topic bus → consumer nodes → viz tools. All transport via DDS.</p>
+  </div>
+  <div class="reveal" style="display:flex;flex-direction:column;gap:0;">
+    <div style="font-family:var(--mono);font-size:8px;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.4rem;">Hardware</div>
+    <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.25rem;">
+      <div class="arch-node" style="flex:0 0 auto;min-width:90px;"><div style="font-size:11px;font-weight:700;">Camera</div><div style="font-family:var(--mono);font-size:9px;color:var(--text3);">USB/CSI</div></div>
+      <div class="arch-node" style="flex:0 0 auto;min-width:90px;"><div style="font-size:11px;font-weight:700;">LiDAR</div><div style="font-family:var(--mono);font-size:9px;color:var(--text3);">Serial/Eth</div></div>
+      <div class="arch-node" style="flex:0 0 auto;min-width:90px;"><div style="font-size:11px;font-weight:700;">IMU</div><div style="font-family:var(--mono);font-size:9px;color:var(--text3);">I2C/SPI</div></div>
+      <div class="arch-node" style="flex:0 0 auto;min-width:90px;"><div style="font-size:11px;font-weight:700;">Encoders</div><div style="font-family:var(--mono);font-size:9px;color:var(--text3);">GPIO/CAN</div></div>
+      <div class="arch-node" style="flex:0 0 auto;min-width:90px;"><div style="font-size:11px;font-weight:700;">Actuators</div><div style="font-family:var(--mono);font-size:9px;color:var(--text3);">PWM/CAN</div></div>
+    </div>
+    <div style="display:flex;align-items:center;padding:.25rem 0;color:var(--text3);font-family:var(--mono);font-size:10px;gap:.4rem;"><span style="font-size:16px;">↓</span>driver nodes</div>
+    <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.25rem;">
+      <div class="arch-node" style="flex:0 0 auto;min-width:110px;border-color:rgba(0,229,160,0.2);"><div style="font-size:11px;font-weight:700;color:var(--accent);">Camera node</div><div style="font-family:var(--mono);font-size:9px;color:var(--text3);">→ /image_raw</div></div>
+      <div class="arch-node" style="flex:0 0 auto;min-width:110px;border-color:rgba(0,229,160,0.2);"><div style="font-size:11px;font-weight:700;color:var(--accent);">LiDAR node</div><div style="font-family:var(--mono);font-size:9px;color:var(--text3);">→ /scan</div></div>
+      <div class="arch-node" style="flex:0 0 auto;min-width:110px;border-color:rgba(0,229,160,0.2);"><div style="font-size:11px;font-weight:700;color:var(--accent);">IMU node</div><div style="font-family:var(--mono);font-size:9px;color:var(--text3);">→ /imu/data</div></div>
+      <div class="arch-node" style="flex:0 0 auto;min-width:110px;border-color:rgba(0,229,160,0.2);"><div style="font-size:11px;font-weight:700;color:var(--accent);">Odom node</div><div style="font-family:var(--mono);font-size:9px;color:var(--text3);">→ /odom</div></div>
+    </div>
+    <div style="display:flex;align-items:center;padding:.25rem 0;color:var(--accent);font-family:var(--mono);font-size:10px;gap:.4rem;"><span style="font-size:16px;">↓</span>DDS (Fast-DDS)</div>
+    <div class="arch-bus" style="margin-bottom:.25rem;"><div class="dp"></div><div class="dp"></div><div class="dp"></div>
+      <div style="font-family:var(--mono);font-size:9px;color:var(--accent);margin-bottom:.3rem;">TOPIC BUS</div>
+      <div style="font-family:var(--mono);font-size:10px;color:var(--text2);">/image_raw · /scan · /imu/data · /odom · /cmd_vel · /tf · /tf_static · /map · /goal_pose</div>
+    </div>
+    <div style="display:flex;align-items:center;padding:.25rem 0;color:var(--accent);font-family:var(--mono);font-size:10px;gap:.4rem;"><span style="font-size:16px;">↓</span>consumer nodes</div>
+    <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.25rem;">
+      <div class="arch-node" style="flex:0 0 auto;min-width:105px;border-color:rgba(96,165,250,0.2);"><div style="font-size:11px;font-weight:700;color:var(--blue);">TF2 node</div><div style="font-family:var(--mono);font-size:9px;color:var(--text3);">frames</div></div>
+      <div class="arch-node" style="flex:0 0 auto;min-width:105px;border-color:rgba(96,165,250,0.2);"><div style="font-size:11px;font-weight:700;color:var(--blue);">SLAM node</div><div style="font-family:var(--mono);font-size:9px;color:var(--text3);">map building</div></div>
+      <div class="arch-node" style="flex:0 0 auto;min-width:105px;border-color:rgba(96,165,250,0.2);"><div style="font-size:11px;font-weight:700;color:var(--blue);">Nav planner</div><div style="font-family:var(--mono);font-size:9px;color:var(--text3);">path planning</div></div>
+      <div class="arch-node" style="flex:0 0 auto;min-width:105px;border-color:rgba(96,165,250,0.2);"><div style="font-size:11px;font-weight:700;color:var(--blue);">Controller</div><div style="font-family:var(--mono);font-size:9px;color:var(--text3);">vel cmds</div></div>
+      <div class="arch-node" style="flex:0 0 auto;min-width:105px;border-color:rgba(96,165,250,0.2);"><div style="font-size:11px;font-weight:700;color:var(--blue);">Vision node</div><div style="font-family:var(--mono);font-size:9px;color:var(--text3);">OpenCV/DNN</div></div>
+    </div>
+    <div style="display:flex;gap:1.5rem;font-family:var(--mono);font-size:10px;color:var(--text3);margin:.25rem 0;">
+      <span>↔ Services (sync)</span><span>↺ Actions (async goal/feedback)</span>
+    </div>
+    <div style="display:flex;gap:.4rem;flex-wrap:wrap;">
+      <div class="arch-node" style="flex:0 0 auto;min-width:100px;"><div style="font-size:11px;font-weight:700;">RViz2</div></div>
+      <div class="arch-node" style="flex:0 0 auto;min-width:100px;"><div style="font-size:11px;font-weight:700;">Gazebo</div></div>
+      <div class="arch-node" style="flex:0 0 auto;min-width:100px;"><div style="font-size:11px;font-weight:700;">ros2 bag</div></div>
+      <div class="arch-node" style="flex:0 0 auto;min-width:100px;"><div style="font-size:11px;font-weight:700;">rqt_graph</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 02 STACK -->
+<section class="section" id="stack">
+  <div class="section-header reveal"><div class="section-num">02 / tech stack</div><h2 class="section-title">Layered architecture</h2><p class="section-sub">Your code sits at the top. Everything below is configured, not built from scratch.</p></div>
+  <div class="reveal" style="max-width:660px;">
+    <div class="stack-layer" style="background:rgba(0,229,160,0.05);border:1px solid rgba(0,229,160,0.18);"><div class="stack-label" style="color:var(--accent);">Your packages</div><div class="stack-chips"><span class="tag tg">Custom nodes</span><span class="tag tg">Launch files</span><span class="tag tg">Param YAML</span><span class="tag tg">.msg .srv .action</span></div></div>
+    <div style="text-align:center;font-family:var(--mono);font-size:12px;color:var(--text3);height:14px;line-height:14px;">↕</div>
+    <div class="stack-layer" style="background:rgba(96,165,250,0.04);border:1px solid rgba(96,165,250,0.18);"><div class="stack-label" style="color:var(--blue);">ROS2 ecosystem</div><div class="stack-chips"><span class="tag tb">Nav2</span><span class="tag tb">MoveIt2</span><span class="tag tb">SLAM Toolbox</span><span class="tag tb">ros2_control</span><span class="tag tb">image_transport</span></div></div>
+    <div style="text-align:center;font-family:var(--mono);font-size:12px;color:var(--text3);height:14px;line-height:14px;">↕</div>
+    <div class="stack-layer" style="background:rgba(139,92,246,0.04);border:1px solid rgba(139,92,246,0.18);"><div class="stack-label" style="color:var(--purple);">ROS2 core (rcl)</div><div class="stack-chips"><span class="tag tp">rclpy</span><span class="tag tp">rclcpp</span><span class="tag tp">Topics</span><span class="tag tp">Services</span><span class="tag tp">Actions</span><span class="tag tp">TF2</span><span class="tag tp">Params</span></div></div>
+    <div style="text-align:center;font-family:var(--mono);font-size:12px;color:var(--text3);height:14px;line-height:14px;">↕</div>
+    <div class="stack-layer" style="background:rgba(245,158,11,0.04);border:1px solid rgba(245,158,11,0.18);"><div class="stack-label" style="color:var(--amber);">DDS middleware</div><div class="stack-chips"><span class="tag ta">Fast-DDS</span><span class="tag ta">CycloneDDS</span><span class="tag ta">rmw abstraction</span><span class="tag ta">QoS</span></div></div>
+    <div style="text-align:center;font-family:var(--mono);font-size:12px;color:var(--text3);height:14px;line-height:14px;">↕</div>
+    <div class="stack-layer" style="background:rgba(255,107,53,0.04);border:1px solid rgba(255,107,53,0.18);"><div class="stack-label" style="color:var(--coral);">Sim / Viz / Libs</div><div class="stack-chips"><span class="tag tc">Gazebo Harmonic</span><span class="tag tc">RViz2</span><span class="tag tc">OpenCV</span><span class="tag tc">PCL</span><span class="tag tc">Eigen3</span></div></div>
+    <div style="text-align:center;font-family:var(--mono);font-size:12px;color:var(--text3);height:14px;line-height:14px;">↕</div>
+    <div class="stack-layer" style="background:var(--bg3);border:1px solid var(--border);"><div class="stack-label" style="color:var(--text2);">OS / Hardware</div><div class="stack-chips"><span class="tag tgr">Ubuntu 22.04</span><span class="tag tgr">Linux kernel</span><span class="tag tgr">GPIO/CAN/USB</span></div></div>
+  </div>
+</section>
+
+<!-- 03 TIMELINE -->
+<section class="section" id="timeline">
+  <div class="section-header reveal"><div class="section-num">03 / timeline</div><h2 class="section-title">8-week progression</h2><p class="section-sub">One deliverable per week. Don't skip — each week builds directly on the last.</p></div>
+  <div class="card reveal">
+    <div class="tl-week" style="padding-top:0;"><div></div><div style="font-family:var(--mono);font-size:8px;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;">Concept</div><div style="font-family:var(--mono);font-size:8px;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;">Tools</div><div style="font-family:var(--mono);font-size:8px;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;">Build</div><div style="font-family:var(--mono);font-size:8px;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;">Output</div></div>
+    <div class="tl-week cur"><div><div class="wbadge cur">W3</div><div style="font-family:var(--mono);font-size:8px;color:var(--accent);">now</div></div><div><span class="tag tg" style="margin-bottom:.3rem;display:inline-block;">Services</span><div style="font-size:11px;color:var(--text2);">Custom .srv, req/res, async, error handling</div></div><div style="font-family:var(--mono);font-size:9px;color:var(--text3);">ros2 service<br>.srv files<br>Python client</div><div style="font-size:11px;color:var(--text2);"><strong style="color:var(--text);">Calculator service</strong> — 4 ops + error codes</div><div><span class="tag tg">Working srv</span></div></div>
+    <div class="tl-week"><div><div class="wbadge">W4</div></div><div><span class="tag tb" style="margin-bottom:.3rem;display:inline-block;">Actions</span><div style="font-size:11px;color:var(--text2);">Long tasks, feedback loop, param YAML</div></div><div style="font-family:var(--mono);font-size:9px;color:var(--text3);">ActionServer<br>ros2 param<br>YAML</div><div style="font-size:11px;color:var(--text2);"><strong style="color:var(--text);">Nav action server</strong> with goal/feedback</div><div><span class="tag tb">ActionServer</span></div></div>
+    <div class="tl-week"><div><div class="wbadge">W5</div></div><div><span class="tag ta" style="margin-bottom:.3rem;display:inline-block;">TF2 + URDF</span><div style="font-size:11px;color:var(--text2);">Coordinate frames, static/dynamic TF</div></div><div style="font-family:var(--mono);font-size:9px;color:var(--text3);">tf2_ros<br>RViz2<br>URDF</div><div style="font-size:11px;color:var(--text2);"><strong style="color:var(--text);">2-link robot arm</strong> in RViz + TF tree</div><div><span class="tag ta">RViz demo</span></div></div>
+    <div class="tl-week"><div><div class="wbadge">W6</div></div><div><span class="tag tc" style="margin-bottom:.3rem;display:inline-block;">Gazebo</span><div style="font-size:11px;color:var(--text2);">SDF world, physics plugins, LiDAR+camera</div></div><div style="font-family:var(--mono);font-size:9px;color:var(--text3);">Gazebo<br>ros_gz_bridge<br>teleop</div><div style="font-size:11px;color:var(--text2);"><strong style="color:var(--text);">Diff-drive robot</strong> in maze, teleoperated</div><div><span class="tag tc">Sim robot</span></div></div>
+    <div class="tl-week"><div><div class="wbadge">W7</div></div><div><span class="tag tp" style="margin-bottom:.3rem;display:inline-block;">Nav2</span><div style="font-size:11px;color:var(--text2);">Nav2, costmaps, BT navigator, SLAM</div></div><div style="font-family:var(--mono);font-size:9px;color:var(--text3);">Nav2<br>SLAM Toolbox<br>nav goals</div><div style="font-size:11px;color:var(--text2);"><strong style="color:var(--text);">Autonomous navigation</strong> — map + goals</div><div><span class="tag tp">Autonomous</span></div></div>
+    <div class="tl-week"><div><div class="wbadge">W8</div></div><div><span class="tag tgr" style="margin-bottom:.3rem;display:inline-block;">Portfolio</span><div style="font-size:11px;color:var(--text2);">C++ node, tests, READMEs, demo videos</div></div><div style="font-family:var(--mono);font-size:9px;color:var(--text3);">ament_cmake<br>gtest<br>GitHub CI</div><div style="font-size:11px;color:var(--text2);"><strong style="color:var(--text);">3 GitHub repos</strong> with video + CI</div><div><span class="tag tgr">Job-ready</span></div></div>
+  </div>
+</section>
+
+<!-- 04 SKILLS -->
+<section class="section" id="skills">
+  <div class="section-header reveal"><div class="section-num">04 / skill tree</div><h2 class="section-title">What unlocks what</h2><p class="section-sub">Sequential dependencies. TF2 and Gazebo are hard blockers.</p></div>
+  <div class="grid2 reveal" style="align-items:start;">
+    <div>
+      <div class="card" style="margin-bottom:.75rem;">
+        <div style="font-family:var(--mono);font-size:9px;color:var(--accent);margin-bottom:.75rem;letter-spacing:.08em;">CORE PATH</div>
+        <pre style="font-family:var(--mono);font-size:11px;color:var(--text3);line-height:2;">Linux CLI
+├── ROS2 workspace (colcon, ament)
+│   ├── <span style="color:var(--accent);">Topics + Pub/Sub</span>
+│   │   ├── <span style="color:var(--accent);">Services (.srv)</span>  ← you are here
+│   │   ├── <span style="color:var(--accent);">Actions (.action)</span>
+│   │   └── Parameters (YAML)
+│   └── <span style="color:var(--coral);">TF2 ← bottleneck #1</span>
+│       └── URDF + RViz2
+│           └── <span style="color:var(--coral);">Gazebo ← bottleneck #2</span>
+│               └── Nav2 / MoveIt2
+│                   └── SLAM → Jobs</pre>
+      </div>
+    </div>
+    <div>
+      <div style="background:rgba(255,107,53,0.05);border:1px solid rgba(255,107,53,0.18);border-radius:8px;padding:.875rem;margin-bottom:.625rem;">
+        <div style="font-size:12px;font-weight:700;color:var(--coral);margin-bottom:.3rem;">Bottleneck #1 — TF2</div>
+        <div style="font-size:11px;color:var(--text2);line-height:1.6;">Master: parent_frame, child_frame, lookupTransform, time tolerances. Everything in Nav2 and SLAM depends on this.</div>
+      </div>
+      <div style="background:rgba(255,107,53,0.05);border:1px solid rgba(255,107,53,0.18);border-radius:8px;padding:.875rem;margin-bottom:.625rem;">
+        <div style="font-size:12px;font-weight:700;color:var(--coral);margin-bottom:.3rem;">Bottleneck #2 — Gazebo wiring</div>
+        <div style="font-size:11px;color:var(--text2);line-height:1.6;">ros_gz_bridge topic remapping is non-obvious. Spend extra time here before Nav2.</div>
+      </div>
+      <div class="card">
+        <div style="font-family:var(--mono);font-size:9px;color:var(--text3);margin-bottom:.625rem;letter-spacing:.08em;">HIRE-BOOSTERS</div>
+        <div style="font-size:12px;color:var(--text2);line-height:1.9;">C++ nodes (rclcpp) · SLAM Toolbox deep dive · OpenCV + image_transport · Docker + GitHub CI · ros2_control</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 05 PROJECTS -->
+<section class="section" id="projects">
+  <div class="section-header reveal"><div class="section-num">05 / project ladder</div><h2 class="section-title">Beginner → job-ready</h2><p class="section-sub">Minimum portfolio = projects 2, 5, 6 on GitHub with demo videos.</p></div>
+  <div style="display:flex;flex-direction:column;gap:.5rem;" class="reveal">
+    <div class="proj-card"><div class="proj-num" style="background:rgba(0,229,160,0.1);color:var(--accent);">1</div><div><div style="font-size:13px;font-weight:700;margin-bottom:.2rem;">Hello World publisher</div><div style="font-size:11px;color:var(--text2);">Teaches: node lifecycle · topic flow · colcon build</div></div><div><span class="tag tg">→ topics</span></div></div>
+    <div class="proj-card" style="border-color:rgba(0,229,160,0.25);"><div class="proj-num" style="background:rgba(0,229,160,0.15);color:var(--accent);">2</div><div><div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:.2rem;">Calculator service ← you are here</div><div style="font-size:11px;color:var(--text2);">Teaches: req/res · async calls · error codes · .srv files</div></div><div><span class="tag tg">→ actions</span></div></div>
+    <div class="proj-card"><div class="proj-num" style="background:rgba(96,165,250,0.1);color:var(--blue);">3</div><div><div style="font-size:13px;font-weight:700;margin-bottom:.2rem;">Navigation action server</div><div style="font-size:11px;color:var(--text2);">Teaches: ActionServer · goal/feedback/result · preemption</div></div><div><span class="tag tb">→ TF2</span></div></div>
+    <div class="proj-card"><div class="proj-num" style="background:rgba(245,158,11,0.1);color:var(--amber);">4</div><div><div style="font-size:13px;font-weight:700;margin-bottom:.2rem;">2-link robot arm in RViz</div><div style="font-size:11px;color:var(--text2);">Teaches: coordinate frames · joint states · URDF · visualization</div></div><div><span class="tag ta">→ Gazebo</span></div></div>
+    <div class="proj-card"><div class="proj-num" style="background:rgba(255,107,53,0.1);color:var(--coral);">5</div><div><div style="font-size:13px;font-weight:700;margin-bottom:.2rem;">Diff-drive robot in Gazebo ⭐</div><div style="font-size:11px;color:var(--text2);">Teaches: SDF · sensor plugins · ros_gz_bridge · costmap</div></div><div><span class="tag tc">→ Nav2</span></div></div>
+    <div class="proj-card"><div class="proj-num" style="background:rgba(139,92,246,0.1);color:var(--purple);">6</div><div><div style="font-size:13px;font-weight:700;margin-bottom:.2rem;">Autonomous navigator ⭐</div><div style="font-size:11px;color:var(--text2);">Teaches: BT navigator · costmaps · recovery · planners</div></div><div><span class="tag tp">→ C++</span></div></div>
+    <div class="proj-card"><div class="proj-num" style="background:rgba(255,255,255,0.04);color:var(--text2);">7</div><div><div style="font-size:13px;font-weight:700;margin-bottom:.2rem;">C++ node rewrite</div><div style="font-size:11px;color:var(--text2);">Teaches: ament_cmake · rclcpp · memory management</div></div><div><span class="tag tgr">→ vision</span></div></div>
+    <div class="proj-card"><div class="proj-num" style="background:rgba(255,255,255,0.04);color:var(--text2);">8</div><div><div style="font-size:13px;font-weight:700;margin-bottom:.2rem;">Vision detection pipeline</div><div style="font-size:11px;color:var(--text2);">Teaches: image_transport · cv_bridge · object detection</div></div><div><span class="tag tgr">job-ready</span></div></div>
+  </div>
+</section>
+
+<!-- 06 NODE GRAPH -->
+<section class="section" id="nodegraph">
+  <div class="section-header reveal"><div class="section-num">06 / node graph</div><h2 class="section-title">Live rqt_graph clone</h2><p class="section-sub">Drag nodes. Click to inspect connections. Animated pulses show live data flow.</p></div>
+  <div class="reveal">
+    <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.75rem;">
+      <button class="gbtn active" onclick="loadGraph('w3')" id="gbtn-w3">W3: Calculator</button>
+      <button class="gbtn" onclick="loadGraph('w4')" id="gbtn-w4">W4: Actions</button>
+      <button class="gbtn" onclick="loadGraph('w6')" id="gbtn-w6">W6: Simulation</button>
+      <button class="gbtn" onclick="loadGraph('w7')" id="gbtn-w7">W7: Nav2</button>
+      <button class="gbtn" onclick="resetGraph()" style="margin-left:auto;">↺ reset</button>
+    </div>
+    <div id="ngcanvas"><svg class="graph-svg" id="graph-svg"></svg></div>
+    <div style="display:flex;gap:.875rem;margin-top:.5rem;font-family:var(--mono);font-size:9px;color:var(--text3);">
+      <span style="display:flex;align-items:center;gap:4px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--accent);display:inline-block;"></span>Node</span>
+      <span style="display:flex;align-items:center;gap:4px;"><span style="width:14px;height:3px;background:var(--blue);display:inline-block;border-radius:1px;"></span>Topic</span>
+      <span style="display:flex;align-items:center;gap:4px;"><span style="width:14px;height:3px;background:var(--amber);display:inline-block;border-radius:1px;border-top:2px dashed var(--amber);background:transparent;"></span>Service</span>
+      <span style="display:flex;align-items:center;gap:4px;"><span style="width:14px;height:3px;background:var(--purple);display:inline-block;border-radius:1px;"></span>Action</span>
+    </div>
+    <div id="ginfo" style="margin-top:.625rem;"></div>
+  </div>
+</section>
+
+<!-- 07 TERMINAL -->
+<section class="section" id="terminal">
+  <div class="section-header reveal"><div class="section-num">07 / terminal simulator</div><h2 class="section-title">Fake ROS2 terminal</h2><p class="section-sub">↑↓ history · Tab autocomplete · type <code style="font-family:var(--mono);color:var(--accent);">help</code> to start</p></div>
+  <div class="reveal" style="position:relative;">
+    <div class="terminal">
+      <div class="term-hdr"><div class="tdot" style="background:#ff5f57;"></div><div class="tdot" style="background:#febc2e;"></div><div class="tdot" style="background:#28c840;"></div><span style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-left:6px;">shubham@ubuntu: ~/ros2_ws</span><span style="font-family:var(--mono);font-size:9px;color:var(--text3);margin-left:auto;">ROS2 Humble</span></div>
+      <div class="term-body" id="term-body"></div>
+      <div style="position:relative;">
+        <div class="ac-box" id="ac-box" style="display:none;"></div>
+        <div class="term-inp-row">
+          <span class="term-ps">shubham@ubuntu:~/ros2_ws$</span>
+          <input class="term-inp" id="term-inp" placeholder="type command..." autocomplete="off" spellcheck="false">
+        </div>
+      </div>
+    </div>
+    <div style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-top:.4rem;">Try: ros2 topic list · ros2 node info /calc_server · ros2 service call /calculate · colcon build</div>
+  </div>
+</section>
+
+<!-- 08 INTERVIEW COACH -->
+<section class="section" id="interview">
+  <div class="section-header reveal"><div class="section-num">08 / interview coach</div><h2 class="section-title">Mock technical interview</h2><p class="section-sub">Answer real ROS2 interview questions. Get scored feedback from Claude AI. Practice until it clicks.</p></div>
+  <div class="reveal">
+    <div class="card" style="margin-bottom:.75rem;">
+      <div style="font-size:11px;color:var(--text2);margin-bottom:.4rem;">Anthropic API key <span style="color:var(--text3);font-family:var(--mono);font-size:9px;">(get at console.anthropic.com)</span></div>
+      <div style="display:flex;gap:.5rem;">
+        <input class="api-inp" id="api-inp" type="password" placeholder="sk-ant-...">
+        <button onclick="saveKey()" style="background:rgba(0,229,160,0.08);border:1px solid rgba(0,229,160,0.2);border-radius:7px;padding:.4rem .875rem;color:var(--accent);font-family:var(--mono);font-size:10px;cursor:pointer;">Save</button>
+      </div>
+      <div id="key-status" style="font-family:var(--mono);font-size:9px;margin-top:.3rem;"></div>
+    </div>
+    <div style="margin-bottom:.625rem;"><div style="font-size:11px;color:var(--text2);margin-bottom:.4rem;">Topic:</div><div style="display:flex;gap:.4rem;flex-wrap:wrap;" id="topic-btns"></div></div>
+    <div class="coach-chat" id="coach-chat"></div>
+    <div style="display:flex;gap:.625rem;margin-top:.625rem;">
+      <textarea class="coach-inp" id="coach-inp" placeholder="Type your answer… (Enter to send)"></textarea>
+      <button class="csend" id="csend" onclick="sendCoach()">Send →</button>
+    </div>
+    <div style="font-family:var(--mono);font-size:9px;color:var(--text3);margin-top:.4rem;">Avg score: <span id="cscore" style="color:var(--accent);">—</span> · Questions: <span id="cqcount">0</span></div>
+  </div>
+</section>
+
+<!-- 09 FLASHCARDS -->
+<section class="section" id="flashcards">
+  <div class="section-header reveal"><div class="section-num">09 / spaced repetition flashcards</div><h2 class="section-title">Burn ROS2 concepts into memory</h2><p class="section-sub">Rate each card. Harder cards resurface sooner. Click card to flip.</p></div>
+  <div class="reveal">
+    <div class="fc-meta">
+      <span id="fc-counter">Card 1 / 30</span>
+      <span id="fc-due">Due today: <span id="fc-due-count" style="color:var(--accent);">0</span></span>
+    </div>
+    <div class="fc-wrap" id="fc-wrap" onclick="flipCard()">
+      <div class="fc-card" id="fc-card">
+        <div class="fc-face fc-front"><div class="fc-label">Question</div><div class="fc-q" id="fc-q">Loading...</div></div>
+        <div class="fc-face fc-back"><div class="fc-label">Answer</div><div class="fc-a" id="fc-a"></div></div>
+      </div>
+    </div>
+    <div id="fc-rate-btns" style="display:none;" class="fc-btns">
+      <button class="fc-btn fc-again" onclick="rateCard(1)">Again<br><span style="font-size:9px;opacity:.7;">&lt;1 day</span></button>
+      <button class="fc-btn fc-hard" onclick="rateCard(2)">Hard<br><span style="font-size:9px;opacity:.7;">1 day</span></button>
+      <button class="fc-btn fc-good" onclick="rateCard(3)">Good<br><span style="font-size:9px;opacity:.7;">3 days</span></button>
+      <button class="fc-btn fc-easy" onclick="rateCard(4)">Easy<br><span style="font-size:9px;opacity:.7;">7 days</span></button>
+    </div>
+    <div class="fc-prog" id="fc-prog">Click card to see answer, then rate</div>
+    <div style="display:flex;gap:.4rem;margin-top:.75rem;justify-content:center;">
+      <button onclick="prevCard()" style="font-family:var(--mono);font-size:10px;padding:.3rem .625rem;border-radius:5px;border:1px solid var(--border);background:var(--bg3);color:var(--text2);cursor:pointer;">← prev</button>
+      <button onclick="nextCard()" style="font-family:var(--mono);font-size:10px;padding:.3rem .625rem;border-radius:5px;border:1px solid var(--border);background:var(--bg3);color:var(--text2);cursor:pointer;">next →</button>
+      <button onclick="showDueOnly()" id="due-only-btn" style="font-family:var(--mono);font-size:10px;padding:.3rem .625rem;border-radius:5px;border:1px solid var(--border);background:var(--bg3);color:var(--text2);cursor:pointer;">due only</button>
+    </div>
+  </div>
+</section>
+
+<!-- 10 SNIPPETS -->
+<section class="section" id="snippets">
+  <div class="section-header reveal"><div class="section-num">10 / code snippet library</div><h2 class="section-title">One-click copy boilerplate</h2><p class="section-sub">Search or filter by category. Click any card to expand. Never Google the same pattern twice.</p></div>
+  <div class="reveal">
+    <input class="snip-search" id="snip-search" placeholder="Search snippets… e.g. publisher, service, launch" oninput="filterSnips()">
+    <div class="snip-cats" id="snip-cats"></div>
+    <div id="snip-list"></div>
+  </div>
+</section>
+
+<!-- 11 ERROR DECODER -->
+<section class="section" id="errordecoder">
+  <div class="section-header reveal"><div class="section-num">11 / ROS2 error decoder</div><h2 class="section-title">Paste error → get plain-English fix</h2><p class="section-sub">Paste any ROS2 error or exception. Get what it means, why it happens, and how to fix it.</p></div>
+  <div class="grid2 reveal" style="align-items:start;">
+    <div>
+      <textarea class="err-inp" id="err-inp" placeholder="Paste your ROS2 error here…&#10;&#10;e.g. [rcl]: Failed to find node&#10;e.g. LookupException: target frame...&#10;e.g. [ERROR] QoS incompatibility..."></textarea>
+      <div style="display:flex;gap:.5rem;align-items:center;margin-top:.5rem;">
+        <button class="err-decode-btn" onclick="decodeError()">Decode error →</button>
+        <span style="font-family:var(--mono);font-size:9px;color:var(--text3);">or click a common error:</span>
+      </div>
+      <div class="common-errors">
+        <span class="err-chip" onclick="loadErr('lookup')">LookupException</span>
+        <span class="err-chip" onclick="loadErr('qos')">QoS mismatch</span>
+        <span class="err-chip" onclick="loadErr('service')">Service unavailable</span>
+        <span class="err-chip" onclick="loadErr('colcon')">colcon build failed</span>
+        <span class="err-chip" onclick="loadErr('tf_future')">tf2 future</span>
+        <span class="err-chip" onclick="loadErr('node_not_found')">Node not found</span>
+        <span class="err-chip" onclick="loadErr('dds_connection')">DDS connection</span>
+        <span class="err-chip" onclick="loadErr('action_reject')">Action rejected</span>
+      </div>
+    </div>
+    <div id="err-result-panel"><div style="font-family:var(--mono);font-size:11px;color:var(--text3);padding:1rem 0;">Error explanation will appear here.</div></div>
+  </div>
+</section>
+
+<!-- 12 RESUME BUILDER -->
+<section class="section" id="resumebuilder">
+  <div class="section-header reveal"><div class="section-num">12 / resume bullet generator</div><h2 class="section-title">Turn projects into job applications</h2><p class="section-sub">Bullets auto-generate based on your completed daily plan tasks. Copy and paste directly to LinkedIn or your CV.</p></div>
+  <div class="reveal" id="resume-view"></div>
+</section>
+
+<!-- 13 STANDUP LOG -->
+<section class="section" id="standup">
+  <div class="section-header reveal"><div class="section-num">13 / daily standup log</div><h2 class="section-title">Build the reflection habit</h2><p class="section-sub">Three fields. One minute. A log you can look back on when motivation dips.</p></div>
+  <div class="grid2 reveal" style="align-items:start;">
+    <div class="card">
+      <div style="display:flex;flex-direction:column;gap:.75rem;">
+        <div>
+          <div class="su-label"><span class="su-dot" style="background:var(--accent);"></span>Yesterday I did</div>
+          <textarea class="standup-inp" id="su-did" rows="3" placeholder="Completed calc_server.py, pushed to GitHub..."></textarea>
+        </div>
+        <div>
+          <div class="su-label"><span class="su-dot" style="background:var(--blue);"></span>Today I will</div>
+          <textarea class="standup-inp" id="su-doing" rows="3" placeholder="Build calc_client.py, add error handling..."></textarea>
+        </div>
+        <div>
+          <div class="su-label"><span class="su-dot" style="background:var(--red);"></span>Blockers</div>
+          <textarea class="standup-inp" id="su-block" rows="2" placeholder="Unclear on how to handle timeout in async client..."></textarea>
+        </div>
+        <button class="standup-save" onclick="saveSU()">Save standup →</button>
+      </div>
+    </div>
+    <div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem;">
+        <div style="font-size:13px;font-weight:700;">Recent logs</div>
+        <button class="su-export" onclick="exportSU()">↓ export</button>
+      </div>
+      <div id="su-history"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 14 DAILY PLAN -->
+<section class="section" id="daily">
+  <div class="section-header reveal"><div class="section-num">14 / daily plan</div><h2 class="section-title">What to do each day</h2><p class="section-sub">Check off tasks. Each earns 10 XP. Progress saves automatically.</p></div>
+  <div class="reveal">
+    <div class="week-tabs" id="week-tabs"></div>
+    <div style="margin-bottom:1rem;">
+      <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="font-size:11px;color:var(--text2);" id="wklbl">Week progress</span><span style="font-family:var(--mono);font-size:11px;color:var(--accent);" id="wkpct">0/5</span></div>
+      <div class="pbar-bg"><div class="pbar-fill" id="wkbar" style="width:0%"></div></div>
+    </div>
+    <div id="day-cards"></div>
+  </div>
+</section>
+
+<!-- 15 WHY -->
+<section class="section" id="why">
+  <div class="section-header reveal"><div class="section-num">15 / why it matters</div><h2 class="section-title">Connect tasks to outcomes</h2><p class="section-sub">Open this when you feel foggy. Click to expand each card.</p></div>
+  <div id="why-cards" class="reveal"></div>
+</section>
+
+<!-- 16 JOB GAP + RADAR -->
+<section class="section" id="jobs">
+  <div class="section-header reveal"><div class="section-num">16 / job gap + skill radar</div><h2 class="section-title">Skills vs real job listings</h2><p class="section-sub">Complete tasks to fill the radar. Blue dotted = target job profile.</p></div>
+  <div class="grid2 reveal" style="align-items:start;gap:2rem;">
+    <div class="card"><table class="gap-table"><thead><tr><th>Skill</th><th>Listings</th><th>Bar</th><th>Week</th><th>Status</th></tr></thead><tbody id="gap-tbody"></tbody></table></div>
+    <div class="card" style="text-align:center;">
+      <div style="font-family:var(--mono);font-size:9px;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.875rem;">Skill radar — live</div>
+      <svg id="radar-svg" width="240" height="240" viewBox="0 0 240 240" style="margin:0 auto;display:block;"></svg>
+      <div class="radar-legend" style="justify-content:center;">
+        <div class="rl-item"><div class="rl-dot" style="background:rgba(0,229,160,0.5);"></div><span>You</span></div>
+        <div class="rl-item"><div class="rl-dot" style="background:rgba(96,165,250,0.5);"></div><span>Target</span></div>
+      </div>
+    </div>
+  </div>
+  <div style="display:flex;gap:.5rem;margin-top:.75rem;flex-wrap:wrap;" class="reveal">
+    <span class="tag tg">Covered</span><span class="tag ta">Coming up</span><span class="tag tr">After July</span>
+  </div>
+</section>
+
+<!-- 17 CAREER -->
+<section class="section" id="career">
+  <div class="section-header reveal"><div class="section-num">17 / career map</div><h2 class="section-title">Where this leads</h2></div>
+  <div class="grid3 reveal">
+    <div class="career-card" style="border-top:3px solid var(--accent);"><div style="font-size:15px;font-weight:800;margin-bottom:.2rem;">ROS developer</div><div style="font-family:var(--mono);font-size:9px;color:var(--text3);margin-bottom:.75rem;">Entry → mid · India ₹5–12L</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:.75rem;"><span class="tag tg">Topics/Services/Actions</span><span class="tag tg">URDF</span><span class="tag tg">Launch files</span><span class="tag tg">Python nodes</span></div><div style="font-family:var(--mono);font-size:10px;color:var(--text3);">Weeks 1–5 sufficient → apply July</div></div>
+    <div class="career-card" style="border-top:3px solid var(--blue);"><div style="font-size:15px;font-weight:800;margin-bottom:.2rem;">Robotics engineer</div><div style="font-family:var(--mono);font-size:9px;color:var(--text3);margin-bottom:.75rem;">Mid · India ₹10–20L</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:.75rem;"><span class="tag tb">All ROS dev skills</span><span class="tag tb">Gazebo sim</span><span class="tag tb">Nav2 / MoveIt2</span><span class="tag tb">C++ basics</span></div><div style="font-family:var(--mono);font-size:10px;color:var(--text3);">Weeks 1–8 + hardware project</div></div>
+    <div class="career-card" style="border-top:3px solid var(--purple);"><div style="font-size:15px;font-weight:800;margin-bottom:.2rem;">Autonomous systems eng</div><div style="font-family:var(--mono);font-size:9px;color:var(--text3);margin-bottom:.75rem;">Senior · India ₹18–35L</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:.75rem;"><span class="tag tp">All robotics skills</span><span class="tag tp">SLAM</span><span class="tag tp">Perception</span><span class="tag tp">C++ proficient</span></div><div style="font-family:var(--mono);font-size:10px;color:var(--text3);">W1–8 + 6mo specialization</div></div>
+  </div>
+</section>
+
+<!-- 18 RANKS -->
+<section class="section" id="ranks">
+  <div class="section-header reveal"><div class="section-num">18 / XP ranks</div><h2 class="section-title">Unlock ranks as you progress</h2><p class="section-sub">Every daily task = 10 XP. Each rank = real ROS2 milestone.</p></div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:.625rem;" id="ranks-grid" class="reveal"></div>
+  <div class="card" style="margin-top:.875rem;"><div style="display:flex;justify-content:space-between;margin-bottom:.4rem;"><span style="font-weight:700;">Your XP</span><span id="xp-disp" style="font-family:var(--mono);font-size:18px;font-weight:700;color:var(--accent);">0</span></div><div style="height:7px;background:var(--bg3);border-radius:4px;overflow:hidden;"><div id="rank-bar" style="height:100%;border-radius:4px;background:var(--rank-color);transition:width .5s,background .5s;width:0%;"></div></div><div id="rank-lbl" style="font-family:var(--mono);font-size:9px;color:var(--text3);margin-top:.4rem;">0/50 XP to next</div></div>
+</section>
+
+<!-- 19 GITHUB -->
+<section class="section" id="github">
+  <div class="section-header reveal"><div class="section-num">19 / github streak</div><h2 class="section-title">Accountability loop</h2><p class="section-sub">Fetch your real contribution heatmap. Green squares = proof you showed up.</p></div>
+  <div class="card reveal">
+    <div style="display:flex;gap:.5rem;margin-bottom:.75rem;">
+      <input class="gh-inp" id="gh-inp" placeholder="your GitHub username">
+      <button class="gh-btn" onclick="fetchGH()">Fetch →</button>
+    </div>
+    <div id="gh-content"><div style="font-family:var(--mono);font-size:11px;color:var(--text3);">Enter username to load contribution graph.</div></div>
+  </div>
+</section>
+
+<footer class="footer">
+  <span>ROS2 Mastery Legendary — Shubham's Blueprint · July 2025 target</span>
+  <span id="foot-pct" style="color:var(--accent);">0% complete</span>
+</footer>
+
+<script>
+// ═══ DATA ═══
+const RANKS=[
+  {name:'Node Newbie',icon:'🔰',color:'#4a5568',min:0,max:50,desc:'First node running'},
+  {name:'Topic Tamer',icon:'📡',color:'#60a5fa',min:51,max:120,desc:'Pub/sub mastered'},
+  {name:'Service Sage',icon:'⚙️',color:'#00e5a0',min:121,max:200,desc:'.srv files done'},
+  {name:'TF2 Wizard',icon:'🧙',color:'#f59e0b',min:201,max:300,desc:'Frames understood'},
+  {name:'Gazebo Overlord',icon:'🌍',color:'#f97316',min:301,max:400,desc:'Simulation running'},
+  {name:'Nav2 Master',icon:'🗺️',color:'#8b5cf6',min:401,max:500,desc:'Autonomous nav done'},
+  {name:'Robotics Architect',icon:'🏆',color:'#ef4444',min:501,max:9999,desc:'Full stack. Job-ready.'},
+];
+const WEEKS=[
+  {n:3,t:'Services',now:true,days:[
+    {id:'w3a',d:'Mon',task:'Define Calculator.srv',info:'add/sub/mul/div ops. colcon build. ros2 interface show your_pkg/srv/Calculator'},
+    {id:'w3b',d:'Tue',task:'Build calc_server.py',info:'Handle 4 ops in callback. Test: ros2 service call /calculate ... \'{a:5,b:3,op:0}\''},
+    {id:'w3c',d:'Wed',task:'Build calc_client.py',info:'Async call with future.result(). Handle timeout. Print full response.'},
+    {id:'w3d',d:'Thu',task:'Error handling + edge cases',info:'Divide-by-zero code. Bad inputs. rclpy.logging. Return structured error.'},
+    {id:'w3e',d:'Fri',task:'GitHub push + rqt_graph',info:'Write README. Screenshot rqt_graph. Paste in README.'},
+  ]},
+  {n:4,t:'Actions',now:false,days:[
+    {id:'w4a',d:'Mon',task:'Create CountTo.action file',info:'goal: int32 target | feedback: int32 current | result: bool success'},
+    {id:'w4b',d:'Tue',task:'Build count_server.py',info:'ActionServer class. Feedback each step. Handle cancel.'},
+    {id:'w4c',d:'Wed',task:'Build count_client.py',info:'Send goal, feedback callback, wait for result. Print each feedback.'},
+    {id:'w4d',d:'Thu',task:'Add ros2 parameters',info:'step_size and delay params. Load from YAML. ros2 param set /count_server step_size 2'},
+    {id:'w4e',d:'Fri',task:'Launch file + GitHub push',info:'Launch file loading YAML params. Push. Update README.'},
+  ]},
+  {n:5,t:'TF2',now:false,days:[
+    {id:'w5a',d:'Mon',task:'Static TF broadcaster',info:'Broadcast world→base_link. View in RViz2. frame_id vs child_frame_id.'},
+    {id:'w5b',d:'Tue',task:'Dynamic TF broadcaster',info:'Rotate child frame with timer. Watch in RViz. Change speed.'},
+    {id:'w5c',d:'Wed',task:'TF listener node',info:'lookupTransform between frames. Print result. Handle LookupException.'},
+    {id:'w5d',d:'Thu',task:'Write 2-link URDF',info:'2 links + revolute joint from scratch. robot_state_publisher. RViz2.'},
+    {id:'w5e',d:'Fri',task:'Animate joints in RViz',info:'joint_state_publisher_gui. Drag sliders. Screenshot for README.'},
+  ]},
+  {n:6,t:'Gazebo',now:false,days:[
+    {id:'w6a',d:'Mon',task:'Install + explore Gazebo',info:'gz sim shapes.sdf. Study world/model/link/joint/plugin in SDF XML.'},
+    {id:'w6b',d:'Tue',task:'Diff-drive robot SDF',info:'2-wheeled robot SDF from scratch. diff_drive plugin. Spawn in world.'},
+    {id:'w6c',d:'Wed',task:'Bridge LiDAR to ROS2',info:'lidar_sensor plugin. ros_gz_bridge /scan. ros2 topic echo /scan.'},
+    {id:'w6d',d:'Thu',task:'Teleop + view in RViz',info:'teleop_twist_keyboard. /scan in RViz2. Static TF for sensor frame.'},
+    {id:'w6e',d:'Fri',task:'Camera + record demo',info:'Camera plugin. /image_raw in RViz. Record 30s screen capture.'},
+  ]},
+  {n:7,t:'Nav2',now:false,days:[
+    {id:'w7a',d:'Mon',task:'Run Nav2 demo',info:'Install Nav2 + SLAM Toolbox. turtlebot3 example. Study launch file.'},
+    {id:'w7b',d:'Tue',task:'Configure Nav2 params',info:'nav2_params.yaml: footprint, costmap resolution, planner plugin.'},
+    {id:'w7c',d:'Wed',task:'Build map with SLAM',info:'Drive manually. Watch map build in RViz. Save with map_saver_cli.'},
+    {id:'w7d',d:'Thu',task:'Load map + nav goals',info:'Load map. Localize. 2D Nav Goal via RViz toolbar. Watch execution.'},
+    {id:'w7e',d:'Fri',task:'Record autonomous demo',info:'Full sequence: spawn→map→navigate. Record video. Portfolio centrepiece.'},
+  ]},
+  {n:8,t:'Portfolio',now:false,days:[
+    {id:'w8a',d:'Mon',task:'Rewrite one node in C++',info:'calc_server.py → C++ with rclcpp. ament_cmake. colcon build. Test.'},
+    {id:'w8b',d:'Tue',task:'Add tests',info:'pytest for Python (3+ cases). gtest stub for C++. GitHub Actions CI.'},
+    {id:'w8c',d:'Wed',task:'Write all READMEs',info:'Every repo: prereqs, build steps, run steps, expected output.'},
+    {id:'w8d',d:'Thu',task:'Record GIFs + videos',info:'GIF: calc service. GIF: URDF arm. Full video: autonomous nav.'},
+    {id:'w8e',d:'Fri',task:'Apply to 3 jobs',info:'Update LinkedIn. Write 2-line project summaries. Send 3 apps. Today.'},
+  ]},
+];
+const WHY_DATA=[
+  {s:'Topics / Pub-Sub',c:'var(--accent)',w:'Every robot sensor streams via topics. Camera → /image_raw, LiDAR → /scan. Without topics you cannot read any sensor. The entire robot is dark.',j:'Sensor integration · telemetry · state monitoring'},
+  {s:'Services (.srv)',c:'var(--blue)',w:'On-demand computation needing a guaranteed response. Is this path clear? Reset odometry. Battery level? Services give synchronous control inside an async system.',j:'Hardware commands · configuration · state queries'},
+  {s:'Actions (.action)',c:'var(--purple)',w:'Everything that takes time uses actions. Nav2, MoveIt2 — every serious stack is built on ActionServer. Navigate to room 5 and pick up the box are both actions.',j:'Autonomous behaviors · manipulation · long-running cmds'},
+  {s:'TF2 (transforms)',c:'var(--amber)',w:'Your robot has 20+ coordinate frames. TF2 answers: where is this sensor, right now, relative to that other frame? Sensor fusion is impossible without it.',j:'Multi-sensor fusion · SLAM · arm kinematics · localization'},
+  {s:'URDF + robot model',c:'var(--coral)',w:'URDF is the robot body — links, joints, mass, collision. Gazebo physics. Nav2 footprint. RViz visualization. It connects everything.',j:'Robot bring-up · simulation setup · hardware interfaces'},
+  {s:'Gazebo simulation',c:'#f97316',w:'No company tests algorithms on real hardware first. Gazebo lets you crash 1000 times for free, tune Nav2 params safely, demo without a physical robot.',j:'Algorithm dev · testing pipelines · investor demos'},
+  {s:'Nav2 stack',c:'var(--purple)',w:'Nav2 is the industry standard for mobile robot autonomy. Warehouse robots, delivery robots, hospital robots all run it. Knowing Nav2 = useful on day 1.',j:'Mobile robotics · autonomous navigation · fleet management'},
+  {s:'C++ node writing',c:'var(--text2)',w:'Python is for prototyping. Production code is C++. Real-time control, hardware drivers, performance-critical nodes are always C++. Most interviews ask for it.',j:'Hardware interfaces · real-time control · production code'},
+];
+const GAPS=[
+  {s:'ROS2 nodes + topics',d:95,w:'W1–W2',st:'covered'},
+  {s:'Services (.srv)',d:80,w:'W3',st:'covered'},
+  {s:'Git + GitHub',d:80,w:'W1+',st:'covered'},
+  {s:'Linux + bash',d:85,w:'W1',st:'covered'},
+  {s:'C++ basics',d:75,w:'W8',st:'coming'},
+  {s:'Actions (.action)',d:75,w:'W4',st:'coming'},
+  {s:'TF2 transforms',d:70,w:'W5',st:'coming'},
+  {s:'Gazebo simulation',d:65,w:'W6',st:'coming'},
+  {s:'URDF modeling',d:65,w:'W5',st:'coming'},
+  {s:'Nav2 navigation',d:60,w:'W7',st:'coming'},
+  {s:'SLAM / mapping',d:55,w:'W7',st:'coming'},
+  {s:'OpenCV / vision',d:50,w:'post-W8',st:'after'},
+  {s:'ros2_control',d:40,w:'post-W8',st:'after'},
+];
+const FLASHCARDS=[
+  {q:'What is a ROS2 node?',a:'A process that performs computation. Nodes communicate via topics, services, and actions. Each node has a unique name in the ROS2 graph. Think of it as a microservice in the robot.'},
+  {q:'What is the difference between a topic and a service?',a:'Topics are async pub/sub — publishers don\'t wait for subscribers. Services are sync req/res — the client waits for a response. Use topics for continuous data, services for on-demand computation.'},
+  {q:'What is an Action in ROS2?',a:'An async request-response pattern for long-running tasks. Unlike services, actions provide: goal acceptance/rejection, periodic feedback, and a final result. Used by Nav2, MoveIt2.'},
+  {q:'What is TF2?',a:'The transform library. It tracks coordinate frame relationships over time. Every sensor, joint, and map frame is registered here. lookupTransform() answers "where is frame A relative to frame B right now?"'},
+  {q:'What is QoS in ROS2?',a:'Quality of Service policies that control how messages are delivered. Key policies: Reliability (RELIABLE vs BEST_EFFORT), Durability (TRANSIENT_LOCAL vs VOLATILE), History (KEEP_LAST vs KEEP_ALL). Mismatched QoS = silent communication failure.'},
+  {q:'What is DDS?',a:'Data Distribution Service — the middleware layer under ROS2. It handles all topic/service/action transport. Default: Fast-DDS. Alternative: CycloneDDS. ROS2 abstracts it via the rmw layer so you can swap without code changes.'},
+  {q:'What is colcon?',a:'The build tool for ROS2. colcon build compiles all packages. colcon build --packages-select pkg_name builds one. colcon test runs tests. It replaced catkin_make from ROS1.'},
+  {q:'What is the difference between rclpy and rclcpp?',a:'rclpy = Python client library. rclcpp = C++ client library. Both wrap the same rcl core. Python for rapid prototyping, C++ for production and real-time code. Most companies want both.'},
+  {q:'What is a launch file?',a:'A Python file (in ROS2) that starts multiple nodes, sets parameters, and configures remappings in one command. ros2 launch pkg_name file.launch.py. Replaces XML launch files from ROS1.'},
+  {q:'What is URDF?',a:'Unified Robot Description Format. An XML format describing robot geometry — links (bodies), joints (connections), mass, inertia, collision shapes. Used by Gazebo for physics, Nav2 for footprint, RViz for visualization.'},
+  {q:'What is the parameter server in ROS2?',a:'Each node has its own parameter server (unlike ROS1\'s global server). Set via YAML files in launch, or at runtime with ros2 param set. Declare in code with declare_parameter().'},
+  {q:'What is ros2 bag?',a:'Records all topic messages to a file and replays them later. ros2 bag record -a records everything. ros2 bag play file replays. Essential for debugging and dataset collection.'},
+  {q:'What is Nav2?',a:'The Navigation 2 stack — the standard for mobile robot autonomy in ROS2. Components: AMCL (localization), costmap_2d (obstacle avoidance), nav2_planner (path planning), nav2_controller (path following), BT navigator (behavior trees).'},
+  {q:'What is SLAM?',a:'Simultaneous Localization and Mapping. The robot builds a map of its environment while tracking its own position within that map. SLAM Toolbox is the standard ROS2 implementation. Requires LiDAR data on /scan.'},
+  {q:'What is a costmap in Nav2?',a:'A 2D grid overlaid on the map showing obstacle costs. Global costmap = full map for planning. Local costmap = local window for real-time obstacle avoidance. Each cell has a cost from 0 (free) to 254 (lethal obstacle).'},
+  {q:'What is ros2_control?',a:'A framework for real-time robot control. Provides hardware_interface (read/write real hardware), controller_manager (load/unload controllers), and standard controllers (joint_trajectory_controller, diff_drive_controller). Bridges ROS2 to actual motors.'},
+  {q:'What is image_transport?',a:'A ROS2 package for publishing/subscribing to images efficiently. Supports raw, compressed, and theora transports. Use with cv_bridge to convert between ROS Image messages and OpenCV Mat objects.'},
+  {q:'What is the difference between static and dynamic TF?',a:'Static TF (tf2_ros.StaticTransformBroadcaster) is published once and cached — for fixed frames like sensor mounts. Dynamic TF (TransformBroadcaster) is published continuously — for moving joints and robot pose.'},
+  {q:'What does ros2 topic echo do?',a:'Subscribes to a topic and prints every message to the terminal. Essential for debugging. ros2 topic echo /scan shows LiDAR data. ros2 topic echo /cmd_vel shows velocity commands being sent.'},
+  {q:'What is the BT Navigator in Nav2?',a:'Behavior Tree Navigator — the brain of Nav2. It orchestrates navigation using a behavior tree (BT). The tree defines how to handle: goal received, plan a path, follow the path, handle failures, recover. XML-defined, fully configurable.'},
+  {q:'What is rqt_graph?',a:'A GUI tool that visualizes the ROS2 computation graph — all running nodes, topics, and their connections. Use it to debug communication issues. The node graph section in this website replicates it.'},
+  {q:'What is ament?',a:'The build system for ROS2 packages. ament_python for Python packages, ament_cmake for C++. Configured via package.xml (dependencies) and CMakeLists.txt or setup.py. Replaces catkin from ROS1.'},
+  {q:'What is a lifecycle node?',a:'A node with defined states: Unconfigured, Inactive, Active, Finalized. Transitions are explicit. Used for deterministic startup in production systems. Nav2 uses lifecycle nodes so you can control startup order.'},
+  {q:'What is ros_gz_bridge?',a:'Bridges topics between Gazebo (gz transport) and ROS2. Maps gz topic types to ROS2 message types. Example: gz /lidar → ros2 /scan. Required whenever you use a Gazebo sensor plugin in a ROS2 workflow.'},
+  {q:'What is the difference between KEEP_LAST and KEEP_ALL in QoS?',a:'KEEP_LAST(N) keeps the last N messages in a queue — good for real-time data. KEEP_ALL keeps every message — good for logging. For sensor data, KEEP_LAST(1) is typical. For critical events, KEEP_ALL.'},
+  {q:'What is AMCL?',a:'Adaptive Monte Carlo Localization. A particle filter that estimates the robot\'s position within a known map using LiDAR scan matching. Used in the Nav2 localization phase (after map is built with SLAM).'},
+  {q:'How do you remap a topic in ROS2?',a:'In Python launch files: remappings=[("/from_topic", "/to_topic")] in Node(). In command line: ros2 run pkg node --ros-args --remap /from:=/to. Critical for connecting nodes that use different default topic names.'},
+  {q:'What is the ros2 service call syntax?',a:'ros2 service call /service_name pkg/srv/Type "{field: value}" — example: ros2 service call /calculate calculator_interfaces/srv/Calculator "{a: 5.0, b: 3.0, op: 0}" — note the YAML-style data in curly braces.'},
+  {q:'What is cv_bridge?',a:'Converts between ROS Image messages (sensor_msgs/msg/Image) and OpenCV Mat objects. import cv_bridge; bridge = CvBridge(); cv_image = bridge.imgmsg_to_cv2(msg). Required for any computer vision node.'},
+  {q:'What is the Nav2 global vs local planner?',a:'Global planner computes the full path from start to goal using the global costmap (NavFn, Smac). Local planner controls velocity in real-time to follow that path while avoiding nearby obstacles (DWB, TEB, RPP).'},
+];
+const SNIPPETS=[
+  {title:'Python publisher',cat:'Publisher',lang:'python',sub:'Publish to a topic every 0.5s',code:`import rclpy
+from rclpy.node import Node
+from std_msgs.msg import String
+
+class MinimalPublisher(Node):
+    def __init__(self):
+        super().__init__('minimal_publisher')
+        self.pub = self.create_publisher(String, 'my_topic', 10)
+        self.timer = self.create_timer(0.5, self.timer_cb)
+
+    def timer_cb(self):
+        msg = String()
+        msg.data = f'Hello at {self.get_clock().now()}'
+        self.pub.publish(msg)
+        self.get_logger().info(f'Publishing: {msg.data}')
+
+def main():
+    rclpy.init()
+    node = MinimalPublisher()
+    rclpy.spin(node)
+    rclpy.shutdown()`},
+  {title:'Python subscriber',cat:'Subscriber',lang:'python',sub:'Subscribe and log messages',code:`import rclpy
+from rclpy.node import Node
+from std_msgs.msg import String
+
+class MinimalSubscriber(Node):
+    def __init__(self):
+        super().__init__('minimal_subscriber')
+        self.sub = self.create_subscription(
+            String, 'my_topic', self.listener_cb, 10)
+
+    def listener_cb(self, msg):
+        self.get_logger().info(f'Received: {msg.data}')
+
+def main():
+    rclpy.init()
+    node = MinimalSubscriber()
+    rclpy.spin(node)
+    rclpy.shutdown()`},
+  {title:'Python service server',cat:'Service',lang:'python',sub:'Server with custom .srv type',code:`import rclpy
+from rclpy.node import Node
+from calculator_interfaces.srv import Calculator
+
+class CalcServer(Node):
+    def __init__(self):
+        super().__init__('calc_server')
+        self.srv = self.create_service(
+            Calculator, 'calculate', self.handle_request)
+        self.get_logger().info('Calculator server ready.')
+
+    def handle_request(self, request, response):
+        if request.op == 0:
+            response.result = request.a + request.b
+            response.success = True
+            response.message = 'OK'
+        elif request.op == 3 and request.b == 0:
+            response.result = 0.0
+            response.success = False
+            response.message = 'Error: Division by zero'
+        return response
+
+def main():
+    rclpy.init()
+    rclpy.spin(CalcServer())
+    rclpy.shutdown()`},
+  {title:'Python service client',cat:'Service',lang:'python',sub:'Async client with timeout',code:`import rclpy
+from rclpy.node import Node
+from calculator_interfaces.srv import Calculator
+
+class CalcClient(Node):
+    def __init__(self):
+        super().__init__('calc_client')
+        self.client = self.create_client(Calculator, 'calculate')
+        while not self.client.wait_for_service(timeout_sec=1.0):
+            self.get_logger().info('Waiting for service...')
+
+    def send_request(self, a, b, op):
+        req = Calculator.Request()
+        req.a, req.b, req.op = a, b, op
+        future = self.client.call_async(req)
+        rclpy.spin_until_future_complete(self, future)
+        return future.result()
+
+def main():
+    rclpy.init()
+    client = CalcClient()
+    result = client.send_request(5.0, 3.0, 0)
+    print(f'Result: {result.result}')
+    rclpy.shutdown()`},
+  {title:'Python action server',cat:'Action',lang:'python',sub:'ActionServer with feedback',code:`import rclpy
+from rclpy.node import Node
+from rclpy.action import ActionServer
+from my_interfaces.action import CountTo
+
+class CountServer(Node):
+    def __init__(self):
+        super().__init__('count_server')
+        self._server = ActionServer(
+            self, CountTo, 'count_to', self.execute_cb)
+
+    async def execute_cb(self, goal_handle):
+        self.get_logger().info(f'Goal: count to {goal_handle.request.target}')
+        feedback = CountTo.Feedback()
+
+        for i in range(1, goal_handle.request.target + 1):
+            if goal_handle.is_cancel_requested:
+                goal_handle.canceled()
+                return CountTo.Result(success=False)
+            feedback.current = i
+            goal_handle.publish_feedback(feedback)
+            await asyncio.sleep(0.5)
+
+        goal_handle.succeed()
+        return CountTo.Result(success=True)`},
+  {title:'Python action client',cat:'Action',lang:'python',sub:'Send goal and track feedback',code:`import rclpy
+from rclpy.node import Node
+from rclpy.action import ActionClient
+from my_interfaces.action import CountTo
+
+class CountClient(Node):
+    def __init__(self):
+        super().__init__('count_client')
+        self._client = ActionClient(self, CountTo, 'count_to')
+
+    def send_goal(self, target):
+        goal = CountTo.Goal()
+        goal.target = target
+        self._client.wait_for_server()
+        future = self._client.send_goal_async(
+            goal, feedback_callback=self.fb_cb)
+        future.add_done_callback(self.goal_response_cb)
+
+    def fb_cb(self, feedback):
+        print(f'Progress: {feedback.feedback.current}')
+
+    def goal_response_cb(self, future):
+        handle = future.result()
+        handle.get_result_async().add_done_callback(self.result_cb)
+
+    def result_cb(self, future):
+        print(f'Done: {future.result().result.success}')`},
+  {title:'Static TF broadcaster',cat:'TF2',lang:'python',sub:'Publish fixed frame offset',code:`import rclpy
+from rclpy.node import Node
+from tf2_ros import StaticTransformBroadcaster
+from geometry_msgs.msg import TransformStamped
+
+class StaticTF(Node):
+    def __init__(self):
+        super().__init__('static_tf')
+        self.br = StaticTransformBroadcaster(self)
+        t = TransformStamped()
+        t.header.stamp = self.get_clock().now().to_msg()
+        t.header.frame_id = 'world'
+        t.child_frame_id = 'base_link'
+        t.transform.translation.x = 1.0
+        t.transform.translation.y = 0.0
+        t.transform.translation.z = 0.5
+        t.transform.rotation.w = 1.0  # identity
+        self.br.sendTransform(t)`},
+  {title:'TF listener',cat:'TF2',lang:'python',sub:'Look up transform between frames',code:`import rclpy
+from rclpy.node import Node
+import tf2_ros
+
+class TFListener(Node):
+    def __init__(self):
+        super().__init__('tf_listener')
+        self.buffer = tf2_ros.Buffer()
+        self.listener = tf2_ros.TransformListener(self.buffer, self)
+        self.timer = self.create_timer(1.0, self.on_timer)
+
+    def on_timer(self):
+        try:
+            t = self.buffer.lookup_transform(
+                'world', 'base_link',
+                rclpy.time.Time())
+            x = t.transform.translation.x
+            self.get_logger().info(f'x = {x:.3f}')
+        except tf2_ros.LookupException as e:
+            self.get_logger().warn(f'TF error: {e}')`},
+  {title:'Python launch file',cat:'Launch',lang:'python',sub:'Start multiple nodes with params',code:`from launch import LaunchDescription
+from launch_ros.actions import Node
+from launch.actions import DeclareLaunchArgument
+from launch.substitutions import LaunchConfiguration
+from ament_index_python.packages import get_package_share_directory
+import os
+
+def generate_launch_description():
+    params = os.path.join(
+        get_package_share_directory('my_pkg'), 'config', 'params.yaml')
+    return LaunchDescription([
+        Node(
+            package='my_pkg',
+            executable='calc_server',
+            name='calc_server',
+            parameters=[params],
+            remappings=[('/old_topic', '/new_topic')]
+        ),
+        Node(
+            package='my_pkg',
+            executable='calc_client',
+            output='screen'
+        ),
+    ])`},
+  {title:'Basic URDF',cat:'URDF',lang:'xml',sub:'2-link robot with revolute joint',code:`<?xml version="1.0"?>
+<robot name="my_robot">
+  <!-- Base link -->
+  <link name="base_link">
+    <visual>
+      <geometry><box size="0.3 0.3 0.1"/></geometry>
+      <material name="blue"><color rgba="0 0 1 1"/></material>
+    </visual>
+    <collision>
+      <geometry><box size="0.3 0.3 0.1"/></geometry>
+    </collision>
+    <inertial>
+      <mass value="1.0"/>
+      <inertia ixx="0.01" ixy="0" ixz="0" iyy="0.01" iyz="0" izz="0.01"/>
+    </inertial>
+  </link>
+
+  <link name="arm_link">
+    <visual>
+      <geometry><cylinder length="0.3" radius="0.02"/></geometry>
+      <material name="red"><color rgba="1 0 0 1"/></material>
+    </visual>
+  </link>
+
+  <joint name="arm_joint" type="revolute">
+    <parent link="base_link"/>
+    <child link="arm_link"/>
+    <origin xyz="0 0 0.1" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-1.57" upper="1.57" effort="10" velocity="1"/>
+  </joint>
+</robot>`},
+  {title:'C++ publisher (rclcpp)',cat:'C++',lang:'cpp',sub:'Basic C++ publisher node',code:`#include "rclcpp/rclcpp.hpp"
+#include "std_msgs/msg/string.hpp"
+#include <chrono>
+using namespace std::chrono_literals;
+
+class MinimalPublisher : public rclcpp::Node {
+public:
+  MinimalPublisher() : Node("minimal_publisher"), count_(0) {
+    pub_ = create_publisher<std_msgs::msg::String>("topic", 10);
+    timer_ = create_wall_timer(
+      500ms, std::bind(&MinimalPublisher::timer_cb, this));
+  }
+private:
+  void timer_cb() {
+    auto msg = std_msgs::msg::String();
+    msg.data = "Hello: " + std::to_string(count_++);
+    RCLCPP_INFO(get_logger(), "Publishing: '%s'", msg.data.c_str());
+    pub_->publish(msg);
+  }
+  rclcpp::Publisher<std_msgs::msg::String>::SharedPtr pub_;
+  rclcpp::TimerBase::SharedPtr timer_;
+  size_t count_;
+};
+int main(int argc, char ** argv) {
+  rclcpp::init(argc, argv);
+  rclcpp::spin(std::make_shared<MinimalPublisher>());
+  rclcpp::shutdown();
+  return 0;
+}`},
+  {title:'Nav2 params (essential)',cat:'Nav2',lang:'yaml',sub:'Minimal working nav2_params.yaml',code:`bt_navigator:
+  ros__parameters:
+    global_frame: map
+    robot_base_frame: base_link
+    odom_topic: /odom
+    default_bt_xml_filename: navigate_w_replanning.xml
+
+local_costmap:
+  local_costmap:
+    ros__parameters:
+      update_frequency: 5.0
+      publish_frequency: 2.0
+      global_frame: odom
+      robot_base_frame: base_link
+      rolling_window: true
+      width: 3
+      height: 3
+      resolution: 0.05
+      robot_radius: 0.22
+
+global_costmap:
+  global_costmap:
+    ros__parameters:
+      update_frequency: 1.0
+      publish_frequency: 1.0
+      global_frame: map
+      robot_base_frame: base_link
+      robot_radius: 0.22
+      resolution: 0.05`},
+];
+const ERRORS={
+  lookup:{type:'TF2 Error',what:'LookupException: target frame does not exist',cause:'The frame you\'re looking up (child_frame_id) hasn\'t been published yet, or it has a typo. Common when: the robot model hasn\'t started, a driver node crashed, or the frame name is misspelled.',fix:`# Check which frames exist:
+ros2 run tf2_tools view_frames
+# or stream the TF tree:
+ros2 topic echo /tf --once
+# Verify frame names:
+ros2 run tf2_ros tf2_echo world base_link`},
+  qos:{type:'QoS Error',what:'QoS incompatibility between publisher and subscriber',cause:'Publisher and subscriber have conflicting QoS policies. Most common: publisher uses BEST_EFFORT but subscriber expects RELIABLE. This causes a silent failure — no messages received, no error thrown.',fix:`# In Python, match QoS explicitly:
+from rclpy.qos import QoSProfile, ReliabilityPolicy, DurabilityPolicy
+qos = QoSProfile(
+    reliability=ReliabilityPolicy.BEST_EFFORT,
+    durability=DurabilityPolicy.VOLATILE,
+    depth=10
+)
+self.sub = self.create_subscription(msg_type, topic, cb, qos)
+# Check mismatches:
+ros2 topic info /your_topic --verbose`},
+  service:{type:'Service Error',what:'Service not available after waiting',cause:'The service server node isn\'t running, crashed, or the service name is wrong. Also happens if you call the service before the server has initialized.',fix:`# Check if service exists:
+ros2 service list | grep your_service
+# Check server node is running:
+ros2 node list
+# Wait properly in client code:
+while not self.client.wait_for_service(timeout_sec=1.0):
+    self.get_logger().warn('Waiting for /your_service...')`},
+  colcon:{type:'Build Error',what:'colcon build: package not found or dependency missing',cause:'A dependency declared in package.xml isn\'t installed, or a package name in CMakeLists.txt / setup.py is wrong. Also happens if you forgot to source the underlay.',fix:`# Source ROS2 underlay first:
+source /opt/ros/humble/setup.bash
+# Install missing deps:
+rosdep install --from-paths src --ignore-src -r -y
+# Build single package:
+colcon build --packages-select my_package
+# Check build log:
+cat log/latest_build/my_package/stdout.log`},
+  tf_future:{type:'TF2 Warning',what:'tf2.ExtrapolationException: Lookup would require extrapolation into the future',cause:'You\'re requesting a transform at a timestamp that\'s ahead of what TF has received. Common when using rclpy.time.Time() (which gives time=0 meaning "latest") vs a future timestamp from a message header.',fix:`# Use rclpy.time.Time() for "latest available":
+t = self.buffer.lookup_transform(
+    'world', 'base_link',
+    rclpy.time.Time())  # NOT the message stamp
+
+# Or add a timeout:
+t = self.buffer.lookup_transform(
+    'world', 'base_link',
+    rclpy.time.Time(),
+    timeout=rclpy.duration.Duration(seconds=1.0))`},
+  node_not_found:{type:'rcl Error',what:'[rcl]: Failed to find node — node not found in the graph',cause:'You\'re calling ros2 node info or similar on a node that doesn\'t exist or isn\'t running. Also happens if node name has a namespace prefix you\'re missing.',fix:`# List all running nodes:
+ros2 node list
+# Nodes with namespaces look like:
+# /my_namespace/my_node
+# Reference them with full name:
+ros2 node info /my_namespace/my_node
+# Check if node crashed:
+ros2 run my_pkg my_node  # run it manually`},
+  dds_connection:{type:'DDS Error',what:'Failed to connect to DDS participants / Discovery failure',cause:'DDS discovery isn\'t working between nodes. Common causes: different ROS_DOMAIN_ID on different terminals, firewall blocking UDP multicast, or running in Docker without host networking.',fix:`# Check domain ID matches in all terminals:
+echo $ROS_DOMAIN_ID  # should be same (default: 0)
+export ROS_DOMAIN_ID=0
+
+# Docker: use host networking:
+docker run --network host ...
+
+# Test discovery:
+# Terminal 1: ros2 topic pub /test std_msgs/msg/String "data: 'hi'"
+# Terminal 2: ros2 topic echo /test`},
+  action_reject:{type:'Action Error',what:'Action goal rejected by server',cause:'The ActionServer returned GoalResponse.REJECT. This means the server received the goal but decided not to execute it — usually because a previous goal is still running, or the goal parameters are invalid.',fix:`# In your server, check the goal_callback:
+def goal_callback(self, goal_request):
+    if self.is_busy:
+        return GoalResponse.REJECT  # ← this is what triggers it
+    return GoalResponse.ACCEPT
+
+# Fix: cancel previous goal first, or make server accept concurrent goals
+# In client, check the goal handle:
+goal_handle = future.result()
+if not goal_handle.accepted:
+    self.get_logger().error('Goal rejected!')
+    return`},
+};
+
+// ═══ STATE ═══
+let done=new Set(),curWeek=3,xp=0,apiKey='',coachHistory=[],coachScores=[],activeTopic=null;
+let fcCards=[...FLASHCARDS],fcIdx=0,fcDueOnly=false,fcRatings={};
+let suHistory=[];
+
+function loadState(){
+  try{
+    const d=localStorage.getItem('ros2_legendary_done');if(d)done=new Set(JSON.parse(d));
+    const k=localStorage.getItem('ros2_legendary_key');if(k){apiKey=k;document.getElementById('api-inp').value=k;document.getElementById('key-status').textContent='✓ Saved';document.getElementById('key-status').style.color='var(--accent)';}
+    const g=localStorage.getItem('ros2_legendary_gh');if(g)document.getElementById('gh-inp').value=g;
+    const fc=localStorage.getItem('ros2_legendary_fc');if(fc)fcRatings=JSON.parse(fc);
+    const su=localStorage.getItem('ros2_legendary_su');if(su)suHistory=JSON.parse(su);
+  }catch(e){}
+  recalcXP();
+}
+function saveState(){try{localStorage.setItem('ros2_legendary_done',JSON.stringify([...done]));}catch(e){}}
+function saveFCRatings(){try{localStorage.setItem('ros2_legendary_fc',JSON.stringify(fcRatings));}catch(e){}}
+function saveSUHistory(){try{localStorage.setItem('ros2_legendary_su',JSON.stringify(suHistory));}catch(e){}}
+function recalcXP(){xp=done.size*10;}
+
+// ═══ RANK ═══
+function getRankIdx(x){for(let i=RANKS.length-1;i>=0;i--){if(x>=RANKS[i].min)return i;}return 0;}
+function updateRankUI(){
+  recalcXP();
+  const ri=getRankIdx(xp);const r=RANKS[ri];
+  document.getElementById('sb-ri').textContent=r.icon;
+  document.getElementById('sb-rn').textContent=r.name;
+  document.getElementById('sb-rn').style.color=r.color;
+  document.getElementById('sb-rx').textContent=xp+' XP';
+  document.documentElement.style.setProperty('--rank-color',r.color);
+  const nxt=RANKS[Math.min(ri+1,RANKS.length-1)].min;
+  const pct=ri===RANKS.length-1?100:Math.round((xp-r.min)/(nxt-r.min)*100);
+  document.getElementById('sb-xf').style.width=Math.min(pct,100)+'%';
+  document.getElementById('xp-disp').textContent=xp;
+  document.getElementById('rank-bar').style.width=Math.min(pct,100)+'%';
+  document.getElementById('rank-lbl').textContent=ri===RANKS.length-1?'MAX RANK':`${xp}/${nxt} XP to next`;
+  const total=WEEKS.reduce((a,w)=>a+w.days.length,0);
+  const pct2=Math.round(done.size/total*100);
+  document.getElementById('sb-pct').textContent=pct2+'%';
+  document.getElementById('sb-bar').style.width=pct2+'%';
+  document.getElementById('foot-pct').textContent=pct2+'% complete';
+  document.querySelectorAll('#ranks-grid .rank-card').forEach((c,i)=>{
+    c.classList.toggle('current',i===ri);c.classList.toggle('locked',xp<RANKS[i].min);
+  });
+  updateRadar();updateResumeView();
+}
+function checkLevelUp(prevSize){
+  const oldRi=getRankIdx(prevSize*10);
+  const newRi=getRankIdx(done.size*10);
+  if(newRi>oldRi){
+    const r=RANKS[newRi];
+    document.getElementById('lu-icon').textContent=r.icon;
+    document.getElementById('lu-name').textContent=r.name;
+    document.getElementById('lu-name').style.color=r.color;
+    document.getElementById('lu-xp').textContent=r.min+' XP — '+r.desc;
+    document.getElementById('lu-overlay').classList.add('show');
+    fireConfetti();
+  }
+}
+
+// ═══ DAILY PLAN ═══
+function renderWeekTabs(){
+  document.getElementById('week-tabs').innerHTML=WEEKS.map(w=>
+    `<button class="wtab${w.n===curWeek?' active':''}${w.now?' is-now':''}" onclick="selWeek(${w.n})">W${w.n}${w.now?'·now':''}: ${w.t}</button>`
+  ).join('');
+}
+function renderDays(){
+  const wk=WEEKS.find(w=>w.n===curWeek);
+  const dc=wk.days.filter(d=>done.has(d.id)).length;
+  document.getElementById('wklbl').textContent=`W${wk.n}: ${wk.t}`;
+  document.getElementById('wkpct').textContent=`${dc}/5`;
+  document.getElementById('wkbar').style.width=(dc/wk.days.length*100)+'%';
+  document.getElementById('day-cards').innerHTML=wk.days.map(d=>`
+    <div class="day-item${done.has(d.id)?' done':''}" onclick="toggleDay('${d.id}')">
+      <div class="day-cb"><svg class="chk" width="11" height="11" viewBox="0 0 11 11"><path d="M1.5 5.5L4.5 8.5L9.5 2.5" stroke="black" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></div>
+      <div class="day-lbl">${d.d}</div>
+      <div style="flex:1;"><div class="day-task">${d.task}<span class="xp-pill">+10 XP</span></div><div class="day-info">${d.info}</div></div>
+    </div>`).join('');
+}
+function selWeek(n){curWeek=n;renderWeekTabs();renderDays();}
+function toggleDay(id){
+  const prev=done.size;
+  if(done.has(id))done.delete(id);else{done.add(id);checkLevelUp(prev);}
+  saveState();renderDays();updateRankUI();
+  const task=WEEKS.flatMap(w=>w.days).find(d=>d.id===id);
+  if(!done.has(id))return;
+  showToast('⚡',task?task.task:'Done','+10 XP earned');
+}
+
+// ═══ WHY ═══
+function renderWhy(){
+  document.getElementById('why-cards').innerHTML=WHY_DATA.map(w=>`
+    <div class="why-card" style="border-left-color:${w.c};" onclick="this.classList.toggle('open')">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div style="font-size:13px;font-weight:700;color:${w.c};">${w.s}</div>
+        <span class="why-chev">▾</span>
+      </div>
+      <div class="why-body">
+        <div style="font-size:12px;color:var(--text2);line-height:1.65;padding-top:.625rem;">${w.w}</div>
+        <div style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-top:.4rem;"><span style="color:var(--accent);">→ jobs:</span> ${w.j}</div>
+      </div>
+    </div>`).join('');
+}
+
+// ═══ GAP ═══
+function renderGap(){
+  document.getElementById('gap-tbody').innerHTML=GAPS.map(g=>{
+    const c=g.st==='covered'?'var(--accent)':g.st==='coming'?'var(--amber)':'var(--red)';
+    const cls=g.st==='covered'?'tg':g.st==='coming'?'ta':'tr';
+    const lbl=g.st==='covered'?'Covered':g.st==='coming'?'Coming':'After July';
+    return `<tr><td style="color:var(--text);font-weight:500;">${g.s}</td><td style="font-family:var(--mono);font-weight:700;">${g.d}%</td><td><div class="gap-bar-bg"><div class="gap-bar-fill" style="background:${c};width:${g.d}%;"></div></div></td><td style="font-family:var(--mono);font-size:9px;color:var(--text3);">${g.w}</td><td><span class="tag ${cls}">${lbl}</span></td></tr>`;
+  }).join('');
+}
+
+// ═══ RADAR ═══
+function updateRadar(){
+  const svg=document.getElementById('radar-svg');if(!svg)return;
+  const cx=120,cy=120,r=85,n=7;
+  const axes=['Topics','Services','Actions','TF2','Gazebo','Nav2','C++'];
+  const wkIds=[['w3b'],['w3a','w3b','w3c'],['w4a','w4b'],['w5a','w5b','w5c'],['w6a','w6b','w6c'],['w7a','w7b'],['w8a']];
+  const target=[90,80,75,70,65,60,55];
+  const mine=wkIds.map(ids=>Math.round((ids.filter(id=>done.has(id)).length/ids.length)*100));
+  function pt(v,i){const a=(Math.PI*2/n)*i-Math.PI/2;const rv=(v/100)*r;return{x:cx+rv*Math.cos(a),y:cy+rv*Math.sin(a)};}
+  let h='';
+  [25,50,75,100].forEach(p=>{const pts=Array.from({length:n},(_,i)=>pt(p,i));h+=`<polygon points="${pts.map(p=>p.x+','+p.y).join(' ')}" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="0.5"/>`;});
+  for(let i=0;i<n;i++){const p=pt(100,i);h+=`<line x1="${cx}" y1="${cy}" x2="${p.x}" y2="${p.y}" stroke="rgba(255,255,255,0.05)" stroke-width="0.5"/>`;const lp=pt(113,i);h+=`<text x="${lp.x}" y="${lp.y}" text-anchor="middle" dominant-baseline="central" font-family="JetBrains Mono,monospace" font-size="8" fill="rgba(255,255,255,0.35)">${axes[i]}</text>`;}
+  const tpts=Array.from({length:n},(_,i)=>pt(target[i],i));h+=`<polygon points="${tpts.map(p=>p.x+','+p.y).join(' ')}" fill="rgba(96,165,250,0.07)" stroke="rgba(96,165,250,0.4)" stroke-width="1" stroke-dasharray="4 3"/>`;
+  const mpts=Array.from({length:n},(_,i)=>pt(Math.max(mine[i],3),i));h+=`<polygon points="${mpts.map(p=>p.x+','+p.y).join(' ')}" fill="rgba(0,229,160,0.1)" stroke="rgba(0,229,160,0.7)" stroke-width="1.5"/>`;
+  mpts.forEach(p=>{h+=`<circle cx="${p.x}" cy="${p.y}" r="3" fill="var(--accent)"/>`;});
+  svg.innerHTML=h;
+}
+
+// ═══ RANKS ═══
+function renderRanks(){
+  document.getElementById('ranks-grid').innerHTML=RANKS.map(r=>`
+    <div class="rank-card" style="border-top:2px solid ${r.color};">
+      <div style="font-size:32px;margin-bottom:.35rem;">${r.icon}</div>
+      <div style="font-size:12px;font-weight:700;color:${r.color};margin-bottom:.2rem;">${r.name}</div>
+      <div style="font-family:var(--mono);font-size:9px;color:var(--text3);">${r.min===0?'0':r.min}–${r.max===9999?'∞':r.max} XP</div>
+      <div style="font-size:10px;color:var(--text3);margin-top:.35rem;line-height:1.4;">${r.desc}</div>
+    </div>`).join('');
+}
+
+// ═══ NODE GRAPH ═══
+const GRAPHS={
+  w3:{nodes:[{id:'calc_server',l:'/calc_server',t:'Node',c:'var(--accent)',x:280,y:160},{id:'calc_client',l:'/calc_client',t:'Node',c:'var(--accent)',x:60,y:160},{id:'rosout',l:'/rosout',t:'Node',c:'var(--text3)',x:170,y:290}],edges:[{f:'calc_client',t:'calc_server',l:'/calculate',c:'var(--amber)',type:'service'},{f:'calc_server',t:'rosout',l:'/rosout',c:'var(--text3)',type:'topic'},{f:'calc_client',t:'rosout',l:'/rosout',c:'var(--text3)',type:'topic'}]},
+  w4:{nodes:[{id:'count_server',l:'/count_server',t:'Node',c:'var(--blue)',x:260,y:150},{id:'count_client',l:'/count_client',t:'Node',c:'var(--blue)',x:60,y:150},{id:'param_events',l:'/parameter_events',t:'Topic',c:'var(--text3)',x:160,y:280}],edges:[{f:'count_client',t:'count_server',l:'/count_to',c:'var(--purple)',type:'action'},{f:'count_server',t:'param_events',l:'params',c:'var(--text3)',type:'topic'}]},
+  w6:{nodes:[{id:'gazebo',l:'/gazebo',t:'Sim',c:'var(--coral)',x:170,y:60},{id:'bridge',l:'/gz_bridge',t:'Bridge',c:'var(--amber)',x:170,y:180},{id:'dd',l:'/diff_drive',t:'Plugin',c:'var(--accent)',x:340,y:120},{id:'lidar',l:'/lidar_sensor',t:'Plugin',c:'var(--accent)',x:340,y:230},{id:'teleop',l:'/teleop',t:'Node',c:'var(--blue)',x:40,y:240},{id:'rviz',l:'/rviz2',t:'Viz',c:'var(--purple)',x:40,y:120}],edges:[{f:'gazebo',t:'bridge',l:'gz transport',c:'var(--coral)',type:'topic'},{f:'bridge',t:'dd',l:'/cmd_vel',c:'var(--accent)',type:'topic'},{f:'lidar',t:'bridge',l:'/scan',c:'var(--accent)',type:'topic'},{f:'teleop',t:'bridge',l:'/cmd_vel',c:'var(--accent)',type:'topic'},{f:'bridge',t:'rviz',l:'/scan',c:'var(--accent)',type:'topic'}]},
+  w7:{nodes:[{id:'slam',l:'/slam_toolbox',t:'Node',c:'var(--amber)',x:280,y:60},{id:'amcl',l:'/amcl',t:'Node',c:'var(--amber)',x:80,y:60},{id:'bt',l:'/bt_navigator',t:'Node',c:'var(--purple)',x:180,y:170},{id:'planner',l:'/planner_server',t:'Node',c:'var(--blue)',x:320,y:260},{id:'ctrl',l:'/controller',t:'Node',c:'var(--blue)',x:60,y:260},{id:'robot',l:'/robot_base',t:'Node',c:'var(--accent)',x:180,y:320}],edges:[{f:'slam',t:'bt',l:'/map',c:'var(--amber)',type:'topic'},{f:'amcl',t:'bt',l:'/amcl_pose',c:'var(--amber)',type:'topic'},{f:'bt',t:'planner',l:'ComputePath',c:'var(--purple)',type:'action'},{f:'bt',t:'ctrl',l:'FollowPath',c:'var(--purple)',type:'action'},{f:'ctrl',t:'robot',l:'/cmd_vel',c:'var(--accent)',type:'topic'}]},
+};
+let gNodes={},gDrag=null,gOffset={x:0,y:0},curGraph='w3';
+function loadGraph(key){
+  curGraph=key;
+  document.querySelectorAll('.gbtn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('gbtn-'+key)?.classList.add('active');
+  const g=GRAPHS[key];
+  const canvas=document.getElementById('ngcanvas');
+  canvas.querySelectorAll('.gnode').forEach(n=>n.remove());
+  gNodes={};
+  g.nodes.forEach(n=>{
+    const el=document.createElement('div');
+    el.className='gnode';el.id='gn-'+n.id;
+    el.style.borderColor=n.c;el.style.left=n.x+'px';el.style.top=n.y+'px';
+    el.innerHTML=`<div class="gn-name" style="color:${n.c}">${n.l}</div><div class="gn-type">${n.t}</div>`;
+    el.addEventListener('mousedown',e=>startDrag(e,n.id));
+    el.addEventListener('click',()=>showGInfo(n,key));
+    canvas.appendChild(el);
+    gNodes[n.id]={...n,el};
+  });
+  drawEdges();
+}
+function drawEdges(){
+  const g=GRAPHS[curGraph];const svg=document.getElementById('graph-svg');
+  let h='<defs><marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke-width="1.5" stroke-linecap="round"/></marker></defs>';
+  g.edges.forEach((e,i)=>{
+    const fn=gNodes[e.f];const tn=gNodes[e.t];if(!fn||!tn)return;
+    const fw=fn.el.getBoundingClientRect().width||80,fh=fn.el.getBoundingClientRect().height||36;
+    const tw=tn.el.getBoundingClientRect().width||80;
+    const x1=fn.x+fw/2,y1=fn.y+fh/2,x2=tn.x+tw/2,y2=tn.y+fh/2;
+    const dash=e.type==='service'?'5,3':e.type==='action'?'8,4':'none';
+    h+=`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${e.c}" stroke-width="1.5" stroke-dasharray="${dash}" opacity="0.55" marker-end="url(#arr)"/>`;
+    const mx=(x1+x2)/2,my=(y1+y2)/2;
+    h+=`<text x="${mx}" y="${my-5}" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="${e.c}" opacity="0.65">${e.l}</text>`;
+    h+=`<circle cx="${x1}" cy="${y1}" r="3.5" fill="${e.c}" opacity="0"><animate attributeName="cx" from="${x1}" to="${x2}" dur="${1.5+i*0.6}s" repeatCount="indefinite" begin="${i*0.6}s"/><animate attributeName="cy" from="${y1}" to="${y2}" dur="${1.5+i*0.6}s" repeatCount="indefinite" begin="${i*0.6}s"/><animate attributeName="opacity" values="0;1;1;0" dur="${1.5+i*0.6}s" repeatCount="indefinite" begin="${i*0.6}s"/></circle>`;
+  });
+  svg.innerHTML=h;
+}
+function startDrag(e,id){gDrag=id;const n=gNodes[id];gOffset={x:e.clientX-n.x,y:e.clientY-n.y};document.addEventListener('mousemove',onDrag);document.addEventListener('mouseup',stopDrag);}
+function onDrag(e){if(!gDrag)return;const n=gNodes[gDrag];n.x=e.clientX-gOffset.x;n.y=e.clientY-gOffset.y;n.el.style.left=n.x+'px';n.el.style.top=n.y+'px';drawEdges();}
+function stopDrag(){gDrag=null;document.removeEventListener('mousemove',onDrag);document.removeEventListener('mouseup',stopDrag);}
+function resetGraph(){const g=GRAPHS[curGraph];g.nodes.forEach(n=>{const nd=gNodes[n.id];if(!nd)return;nd.x=n.x;nd.y=n.y;nd.el.style.left=n.x+'px';nd.el.style.top=n.y+'px';});drawEdges();}
+function showGInfo(n,key){
+  const edges=GRAPHS[key].edges.filter(e=>e.f===n.id||e.t===n.id);
+  document.getElementById('ginfo').innerHTML=`<div class="card-sm" style="border-color:${n.c};"><div style="font-family:var(--mono);font-weight:700;color:${n.c};font-size:11px;margin-bottom:.35rem;">${n.l}</div><div style="font-size:10px;color:var(--text3);">Type: ${n.t} · ${edges.length} connection${edges.length!==1?'s':''}</div>${edges.map(e=>`<div style="font-family:var(--mono);font-size:9px;color:var(--text2);margin-top:2px;">${e.f===n.id?'→':'←'} ${e.l} (${e.type})</div>`).join('')}</div>`;
+}
+
+// ═══ TERMINAL ═══
+const TCMDS={'help':`Available commands:\n  ros2 topic list         — list active topics\n  ros2 topic echo /scan   — stream topic\n  ros2 topic info /topic  — topic details\n  ros2 node list          — list nodes\n  ros2 node info /name    — node details\n  ros2 service list       — list services\n  ros2 service call ...   — call service\n  ros2 interface show ... — show msg type\n  ros2 run <pkg> <node>   — run a node\n  ros2 bag record -a      — record all topics\n  ros2 param list         — list params\n  colcon build            — build workspace\n  source install/setup.bash\n  clear                   — clear terminal`,'clear':'__CLEAR__','ros2 topic list':`/calculate\n/clock\n/cmd_vel\n/imu/data\n/image_raw\n/odom\n/parameter_events\n/rosout\n/scan\n/tf\n/tf_static`,'ros2 node list':`/calc_server\n/calc_client\n/robot_state_publisher\n/rosout`,'ros2 service list':`/calculate\n/calc_server/describe_parameters\n/calc_server/get_parameters\n/calc_server/list_parameters`,'ros2 param list':`/calc_server:\n  use_sim_time`,'ros2 topic info /scan':`Type: sensor_msgs/msg/LaserScan\nPublisher count: 1\nSubscription count: 2`,'ros2 topic info /cmd_vel':`Type: geometry_msgs/msg/Twist\nPublisher count: 1\nSubscription count: 1`,'ros2 topic echo /scan':`---\nheader:\n  frame_id: lidar_link\nangle_min: -3.14159\nangle_max: 3.14159\nrange_min: 0.10\nrange_max: 30.0\nranges: [0.823, 0.817, 0.809, ..., 1.204]\n---`,'ros2 topic echo /cmd_vel':`---\nlinear:\n  x: 0.2\n  y: 0.0\n  z: 0.0\nangular:\n  x: 0.0\n  y: 0.0\n  z: 0.1\n---`,'ros2 node info /calc_server':`/calc_server\n  Subscribers:\n    /parameter_events: rcl_interfaces/msg/ParameterEvent\n  Publishers:\n    /rosout: rcl_interfaces/msg/Log\n  Service Servers:\n    /calculate: calculator_interfaces/srv/Calculator\n    /calc_server/get_parameters: ...\n  Action Servers:\n    (None)`,'ros2 node info /calc_client':`/calc_client\n  Service Clients:\n    /calculate: calculator_interfaces/srv/Calculator`,'ros2 interface show calculator_interfaces/srv/Calculator':`float64 a\nfloat64 b\nint8 op  # 0=add 1=sub 2=mul 3=div\n---\nfloat64 result\nbool success\nstring message`,'ros2 interface show geometry_msgs/msg/Twist':`Vector3 linear\n  float64 x\n  float64 y\n  float64 z\nVector3 angular\n  float64 x\n  float64 y\n  float64 z`,'ros2 service call /calculate calculator_interfaces/srv/Calculator \'{a: 5.0, b: 3.0, op: 0}\'':`requester: making request: ...\n\nresponse:\ncalculator_interfaces.srv.Calculator_Response(result=8.0, success=True, message='OK')`,'ros2 service call /calculate calculator_interfaces/srv/Calculator \'{a: 10.0, b: 0.0, op: 3}\'':`response:\ncalculator_interfaces.srv.Calculator_Response(result=0.0, success=False, message='Error: Division by zero')`,'ros2 bag record -a':`[INFO] Listening for topics...\n[INFO] Subscribed to '/scan'\n[INFO] Subscribed to '/cmd_vel'\n[INFO] Subscribed to '/tf'\n[INFO] Recording... press Ctrl+C to stop`,'colcon build':`Starting >>> calculator_interfaces\nFinished <<< calculator_interfaces [5.23s]\nStarting >>> calculator_nodes\nFinished <<< calculator_nodes [3.11s]\n\nSummary: 2 packages finished [9.18s]`,'source install/setup.bash':``,
+'ros2 run calculator_nodes calc_server':`[INFO] [calc_server]: Calculator server ready.\n[INFO] [calc_server]: Waiting for requests...`,'ros2 run calculator_nodes calc_client':`[INFO] [calc_client]: Service available\n[INFO] [calc_client]: Request: 5.0 + 3.0\n[INFO] [calc_client]: Result: 8.0 (success=True)`,'pwd':`/home/shubham/ros2_ws`,'ls':`build/  install/  log/  src/`,'ls src':`calculator_interfaces/  calculator_nodes/`,'whoami':`shubham`};
+const ALLCMDS=Object.keys(TCMDS);
+let tHist=[],tIdx=-1;
+function tPrint(text,cls='to_'){const body=document.getElementById('term-body');text.split('\n').forEach(l=>{const d=document.createElement('div');d.className='term-line '+cls;d.textContent=l;body.appendChild(d);});body.scrollTop=body.scrollHeight;}
+function tCmd(cmd){const body=document.getElementById('term-body');const row=document.createElement('div');row.className='term-line';row.innerHTML=`<span class="tp_">shubham@ubuntu:~/ros2_ws$ </span><span style="color:var(--text)">${cmd}</span>`;body.appendChild(row);}
+function runCmd(raw){
+  const cmd=raw.trim();if(!cmd)return;
+  tHist.unshift(cmd);tIdx=-1;tCmd(cmd);
+  const out=TCMDS[cmd];
+  if(out==='__CLEAR__'){document.getElementById('term-body').innerHTML='';return;}
+  if(out!==undefined){if(out)tPrint(out);}
+  else if(cmd.startsWith('ros2'))tPrint(`[ERROR] Not found: "${cmd.split(' ').slice(2).join(' ')}" — try "ros2 topic list" first`,'to_r');
+  else tPrint(`bash: ${cmd.split(' ')[0]}: command not found`,'to_r');
+}
+function setupTerminal(){
+  tPrint('ROS2 Humble Hawksbill simulator — type "help"','to_d');tPrint('','');
+  const inp=document.getElementById('term-inp');
+  inp.addEventListener('keydown',e=>{
+    if(e.key==='Enter'){const v=inp.value.trim();runCmd(v);inp.value='';hideAC();}
+    else if(e.key==='ArrowUp'){e.preventDefault();tIdx=Math.min(tIdx+1,tHist.length-1);inp.value=tHist[tIdx]||'';}
+    else if(e.key==='ArrowDown'){e.preventDefault();tIdx=Math.max(tIdx-1,-1);inp.value=tIdx>=0?tHist[tIdx]:'';}
+    else if(e.key==='Tab'){e.preventDefault();const m=ALLCMDS.filter(c=>c.startsWith(inp.value)&&c!==inp.value);if(m.length===1){inp.value=m[0];hideAC();}else if(m.length>1)showAC(m,inp);}
+    else if(e.key==='Escape')hideAC();
+    else setTimeout(()=>{const v=inp.value;if(v.length>1){const m=ALLCMDS.filter(c=>c.startsWith(v)&&c!==v).slice(0,5);if(m.length)showAC(m,inp);else hideAC();}else hideAC();},0);
+  });
+}
+function showAC(matches,inp){const box=document.getElementById('ac-box');box.style.display='block';box.innerHTML=matches.map(m=>`<div class="ac-item" onclick="selectAC('${m}')">${m}</div>`).join('');}
+function hideAC(){document.getElementById('ac-box').style.display='none';}
+function selectAC(cmd){document.getElementById('term-inp').value=cmd;hideAC();}
+
+// ═══ INTERVIEW COACH ═══
+const CTOPICS=[
+  {id:'basics',l:'ROS2 basics',q:'Explain the difference between a topic and a service in ROS2. Give me an example of when you would use each one.'},
+  {id:'tf',l:'TF2 transforms',q:'What is TF2 and why is it critical in robotics? Describe a scenario where you would call lookupTransform.'},
+  {id:'nav',l:'Nav2 stack',q:'Walk me through how Nav2 plans and executes a navigation goal. What are the key components?'},
+  {id:'actions',l:'Actions vs services',q:'What is the difference between an action and a service? When would you prefer an action?'},
+  {id:'gazebo',l:'Simulation',q:'How do you set up a simulated robot in Gazebo and bridge sensor data to ROS2? What plugins are needed?'},
+  {id:'debug',l:'Debugging',q:'A ROS2 node publishes to a topic but your subscriber gets nothing. Walk through your debugging process.'},
+];
+let cScores=[],cQCount=0;
+function saveKey(){apiKey=document.getElementById('api-inp').value.trim();localStorage.setItem('ros2_legendary_key',apiKey);document.getElementById('key-status').textContent='✓ Saved';document.getElementById('key-status').style.color='var(--accent)';}
+function renderTopicBtns(){document.getElementById('topic-btns').innerHTML=CTOPICS.map(t=>`<button class="topic-btn${activeTopic===t.id?' sel':''}" onclick="startCoach('${t.id}')">${t.l}</button>`).join('');}
+function startCoach(id){
+  activeTopic=id;coachHistory=[];renderTopicBtns();
+  const t=CTOPICS.find(x=>x.id===id);
+  document.getElementById('coach-chat').innerHTML='';
+  addMsg('ai',`👋 I'm your ROS2 interviewer. Topic: <strong>${t.l}</strong><br><br>${t.q}`);
+}
+function addMsg(role,html,score=null){
+  const chat=document.getElementById('coach-chat');const isUser=role==='user';
+  const div=document.createElement('div');div.className='cmsg'+(isUser?' user':'');
+  const av=isUser?`<div class="cav" style="background:rgba(0,229,160,0.08);color:var(--accent);">S</div>`:`<div class="cav" style="background:rgba(139,92,246,0.08);color:var(--purple);">AI</div>`;
+  let sc='';if(score!==null){const c=score>=8?'var(--accent)':score>=5?'var(--amber)':'var(--red)';sc=`<div class="cscore" style="background:${c}22;color:${c};border:1px solid ${c}44;">Score: ${score}/10</div>`;}
+  div.innerHTML=`${av}<div style="flex:1;"><div class="cbubble">${html}</div>${sc}</div>`;
+  chat.appendChild(div);chat.scrollTop=chat.scrollHeight;
+}
+function addTyping(){const chat=document.getElementById('coach-chat');const div=document.createElement('div');div.className='cmsg';div.id='typing-ind';div.innerHTML=`<div class="cav" style="background:rgba(139,92,246,0.08);color:var(--purple);">AI</div><div class="cbubble typing"><span></span><span></span><span></span></div>`;chat.appendChild(div);chat.scrollTop=chat.scrollHeight;}
+function rmTyping(){document.getElementById('typing-ind')?.remove();}
+async function sendCoach(){
+  if(!activeTopic){showToast('⚠️','Pick a topic first','Click a topic button above');return;}
+  if(!apiKey){showToast('🔑','API key needed','Enter your Anthropic API key');return;}
+  const inp=document.getElementById('coach-inp');const text=inp.value.trim();if(!text)return;
+  inp.value='';addMsg('user',text);coachHistory.push({role:'user',content:text});
+  const btn=document.getElementById('csend');btn.disabled=true;addTyping();
+  const t=CTOPICS.find(x=>x.id===activeTopic);
+  const sys=`You are a senior ROS2 robotics engineer conducting a technical interview.
+Topic: ${t.l}. Question asked: "${t.q}"
+Evaluate the answer. Give [SCORE: N/10]. Provide brief specific feedback (3-4 sentences). Ask one follow-up question.
+Keep it concise and encouraging but honest.`;
+  try{
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:400,system:sys,messages:coachHistory})});
+    rmTyping();
+    if(!resp.ok){const e=await resp.json();throw new Error(e.error?.message||'API error');}
+    const data=await resp.json();const reply=data.content[0]?.text||'No response';
+    coachHistory.push({role:'assistant',content:reply});
+    const sm=reply.match(/\[SCORE:\s*(\d+)\/10\]/);const score=sm?parseInt(sm[1]):null;
+    if(score!==null){cScores.push(score);cQCount++;}
+    addMsg('ai',reply.replace(/\[SCORE:\s*\d+\/10\]/,'').trim().replace(/\n/g,'<br>'),score);
+    if(cScores.length){document.getElementById('cscore').textContent=(cScores.reduce((a,b)=>a+b,0)/cScores.length).toFixed(1)+'/10';document.getElementById('cqcount').textContent=cQCount;}
+  }catch(err){rmTyping();addMsg('ai',`<span style="color:var(--red);">Error: ${err.message}</span>`);}
+  btn.disabled=false;inp.focus();
+}
+
+// ═══ FLASHCARDS ═══
+let fcFlipped=false;
+function getDueCards(){
+  const now=Date.now();
+  return fcCards.filter((c,i)=>{
+    const r=fcRatings[i];
+    if(!r)return true;
+    return now>=r.nextDue;
+  });
+}
+function updateFCUI(){
+  const arr=fcDueOnly?getDueCards():fcCards;
+  const card=arr[fcIdx]||fcCards[0];
+  const realIdx=fcCards.indexOf(card);
+  document.getElementById('fc-q').textContent=card.q;
+  document.getElementById('fc-a').textContent=card.a;
+  document.getElementById('fc-counter').textContent=`Card ${fcIdx+1} / ${arr.length}`;
+  document.getElementById('fc-due-count').textContent=getDueCards().length;
+  document.getElementById('due-badge').textContent=getDueCards().length;
+  document.getElementById('due-badge').style.display=getDueCards().length>0?'inline':'none';
+  const fc=document.getElementById('fc-card');
+  fc.classList.remove('flipped');fcFlipped=false;
+  document.getElementById('fc-rate-btns').style.display='none';
+  document.getElementById('fc-prog').textContent='Click card to see answer, then rate';
+}
+function flipCard(){
+  fcFlipped=!fcFlipped;
+  document.getElementById('fc-card').classList.toggle('flipped',fcFlipped);
+  document.getElementById('fc-rate-btns').style.display=fcFlipped?'flex':'none';
+  document.getElementById('fc-prog').textContent=fcFlipped?'Rate how well you knew this:':'Click card to see answer';
+}
+function rateCard(rating){
+  const arr=fcDueOnly?getDueCards():fcCards;
+  const card=arr[fcIdx];
+  const idx=fcCards.indexOf(card);
+  const intervals=[0,86400000,259200000,604800000];// 0, 1d, 3d, 7d
+  fcRatings[idx]={rating,nextDue:Date.now()+intervals[rating-1]};
+  saveFCRatings();
+  fcIdx=(fcIdx+1)%arr.length;
+  if(fcIdx>=arr.length)fcIdx=0;
+  updateFCUI();
+  showToast(['','🔴','🟡','🟢','⭐'][rating],'Card rated',['','Review soon','1 day','3 days','7 days'][rating]);
+}
+function nextCard(){const arr=fcDueOnly?getDueCards():fcCards;fcIdx=(fcIdx+1)%arr.length;updateFCUI();}
+function prevCard(){const arr=fcDueOnly?getDueCards():fcCards;fcIdx=(fcIdx-1+arr.length)%arr.length;updateFCUI();}
+function showDueOnly(){fcDueOnly=!fcDueOnly;fcIdx=0;document.getElementById('due-only-btn').style.color=fcDueOnly?'var(--accent)':'var(--text2)';updateFCUI();}
+
+// ═══ SNIPPETS ═══
+let snipCat='All';
+function renderSnipCats(){
+  const cats=['All',...new Set(SNIPPETS.map(s=>s.cat))];
+  document.getElementById('snip-cats').innerHTML=cats.map(c=>`<button class="snip-cat${c===snipCat?' active':''}" onclick="setSnipCat('${c}')">${c}</button>`).join('');
+}
+function setSnipCat(c){snipCat=c;renderSnipCats();renderSnips();}
+function filterSnips(){renderSnips();}
+function renderSnips(){
+  const q=document.getElementById('snip-search').value.toLowerCase();
+  const filtered=SNIPPETS.filter(s=>(snipCat==='All'||s.cat===snipCat)&&(s.title.toLowerCase().includes(q)||s.sub.toLowerCase().includes(q)||s.cat.toLowerCase().includes(q)));
+  document.getElementById('snip-list').innerHTML=filtered.map((s,i)=>`
+    <div class="snip-card" id="snip-${i}">
+      <div class="snip-head" onclick="toggleSnip(${i})">
+        <div><div class="snip-title">${s.title}</div><div class="snip-subtitle">${s.sub} · <span class="snip-toggle">${s.lang}</span></div></div>
+        <div style="display:flex;gap:.5rem;align-items:center;">
+          <span class="tag ${s.lang==='python'?'tg':s.lang==='cpp'?'tb':s.lang==='yaml'?'ta':'tgr'}">${s.cat}</span>
+          <button class="snip-copy" onclick="event.stopPropagation();copySnip(${i})">copy</button>
+        </div>
+      </div>
+      <pre class="snip-code" id="snip-code-${i}">${escHtml(s.code)}</pre>
+    </div>`).join('');
+}
+function toggleSnip(i){document.getElementById('snip-'+i).classList.toggle('open');}
+function copySnip(i){
+  const s=SNIPPETS.filter((s)=>(snipCat==='All'||s.cat===snipCat))[i];
+  // find from rendered
+  const preEl=document.getElementById('snip-code-'+i);
+  if(!preEl)return;
+  navigator.clipboard.writeText(preEl.textContent).then(()=>showToast('📋','Copied!',SNIPPETS[i]?.title||'snippet'));
+}
+function escHtml(t){return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+// ═══ ERROR DECODER ═══
+function loadErr(key){
+  document.getElementById('err-inp').value=`[ERROR] ${ERRORS[key].what}`;
+  decodeError();
+}
+function decodeError(){
+  const inp=document.getElementById('err-inp').value.trim();if(!inp)return;
+  let match=null;
+  for(const [key,err] of Object.entries(ERRORS)){
+    const keywords=key.split('_');
+    if(keywords.some(kw=>inp.toLowerCase().includes(kw.toLowerCase()))||inp.toLowerCase().includes(err.what.toLowerCase().split(' ').slice(0,3).join(' '))){match=err;break;}
+  }
+  if(!match){
+    // fuzzy match
+    for(const err of Object.values(ERRORS)){
+      if(inp.toLowerCase().includes(err.type.toLowerCase().split(' ')[0])){match=err;break;}
+    }
+  }
+  if(match){
+    document.getElementById('err-result-panel').innerHTML=`
+      <div class="err-result">
+        <div class="err-type" style="color:var(--red);">${match.type}</div>
+        <div class="err-what">${match.what}</div>
+        <div class="err-cause">${match.cause}</div>
+        <div class="err-fix-label">How to fix:</div>
+        <pre class="err-fix">${escHtml(match.fix)}</pre>
+      </div>`;
+  }else{
+    document.getElementById('err-result-panel').innerHTML=`<div class="err-result"><div class="err-type" style="color:var(--amber);">Unknown error</div><div class="err-what">No exact match found</div><div class="err-cause">This error isn't in the local database. Try the Interview Coach section and ask Claude directly, or paste the error into a ROS2 forum.</div><div class="err-fix-label">General debugging steps:</div><pre class="err-fix">ros2 node list       # is the node running?
+ros2 topic list      # is the topic published?
+ros2 doctor          # check system health
+journalctl -f        # system logs
+ros2 run --ros-args --log-level DEBUG  # verbose mode</pre></div>`;
+  }
+}
+
+// ═══ RESUME BUILDER ═══
+const PROJ_BULLETS=[
+  {id:2,title:'Calculator service',ids:['w3a','w3b','w3c','w3d','w3e'],bullet:'Built a ROS2 service server/client system in Python with custom .srv message types, handling 4 arithmetic operations with structured error responses and async client calls.',linkedin:'ROS2 · Python · Service-Oriented Architecture · Custom Message Types'},
+  {id:3,title:'Navigation action server',ids:['w4a','w4b','w4c','w4d','w4e'],bullet:'Implemented a ROS2 ActionServer for long-running navigation goals with real-time feedback publishing, goal preemption, and YAML-based parameter configuration via launch files.',linkedin:'ROS2 · ActionServer · Parameter Server · Robot Navigation'},
+  {id:4,title:'2-link robot arm (URDF + TF2)',ids:['w5a','w5b','w5c','w5d','w5e'],bullet:'Designed and deployed a 2-DOF robot arm model using URDF, configured dynamic TF2 frame broadcasting, and visualized the full kinematic chain in RViz2 with interactive joint control.',linkedin:'URDF · TF2 · RViz2 · Robot Modeling · Kinematics'},
+  {id:5,title:'Diff-drive robot in Gazebo',ids:['w6a','w6b','w6c','w6d','w6e'],bullet:'Built a simulated differential-drive robot from scratch in Gazebo (SDF), integrated LiDAR and camera sensor plugins, and bridged all sensor data to ROS2 topics via ros_gz_bridge.',linkedin:'Gazebo · Robot Simulation · Sensor Integration · SDF · ros_gz_bridge'},
+  {id:6,title:'Autonomous navigator (Nav2 + SLAM)',ids:['w7a','w7b','w7c','w7d','w7e'],bullet:'Deployed a fully autonomous mobile robot using Nav2 and SLAM Toolbox — built real-time occupancy maps via LiDAR, localized with AMCL, and executed goal-based navigation with costmap-based obstacle avoidance.',linkedin:'Nav2 · SLAM · Autonomous Navigation · ROS2 · Mobile Robotics'},
+  {id:7,title:'C++ node (rclcpp)',ids:['w8a','w8b'],bullet:'Ported a Python ROS2 service node to C++ using rclcpp and ament_cmake, adding unit tests with gtest and configuring automated CI via GitHub Actions.',linkedin:'C++ · rclcpp · CMake · Unit Testing · GitHub Actions · CI/CD'},
+];
+function updateResumeView(){
+  const view=document.getElementById('resume-view');if(!view)return;
+  const completed=PROJ_BULLETS.filter(p=>p.ids.some(id=>done.has(id)));
+  const pending=PROJ_BULLETS.filter(p=>!p.ids.some(id=>done.has(id)));
+  let html='';
+  if(completed.length>0){
+    html+='<div style="font-size:13px;font-weight:700;margin-bottom:.75rem;color:var(--accent);">✓ Ready to use ('+completed.length+' project'+(completed.length!==1?'s':'')+')</div>';
+    completed.forEach(p=>{
+      html+=`<div class="resume-proj completed"><div style="font-family:var(--mono);font-size:14px;color:var(--accent);">✓</div><div style="flex:1;"><div class="resume-proj-title">Project ${p.id}: ${p.title}</div><div class="resume-bullet">"${p.bullet}"</div><div style="display:flex;gap:.5rem;margin-top:.35rem;flex-wrap:wrap;"><button class="copy-bullet" onclick="navigator.clipboard.writeText('${p.bullet.replace(/'/g,"\\'")}').then(()=>showToast('📋','Copied bullet','Ready to paste'))">copy bullet</button><div style="font-family:var(--mono);font-size:9px;color:var(--text3);padding:.2rem .5rem;">Skills: ${p.linkedin}</div></div></div></div>`;
+    });
+  }
+  if(pending.length>0){
+    html+='<div style="font-size:13px;font-weight:700;margin-bottom:.625rem;color:var(--text3);margin-top:'+(completed.length>0?'1.25rem':'0')+';">Unlocks when you complete these projects</div>';
+    pending.forEach(p=>{
+      html+=`<div class="resume-proj pending"><div style="font-family:var(--mono);font-size:14px;color:var(--text3);">○</div><div style="flex:1;"><div class="resume-proj-title" style="color:var(--text3);">Project ${p.id}: ${p.title}</div><div style="font-size:11px;color:var(--text3);font-family:var(--mono);">Complete daily plan tasks for W${3+p.id-2} to unlock this bullet</div></div></div>`;
+    });
+  }
+  if(completed.length>0){
+    const skills=[...new Set(completed.flatMap(p=>p.linkedin.split(' · ')))].slice(0,10);
+    html+=`<div class="resume-summary-box" style="margin-top:1rem;"><div style="font-size:12px;font-weight:700;margin-bottom:.5rem;">LinkedIn skills section</div><div style="display:flex;flex-wrap:wrap;gap:.4rem;">${skills.map(s=>`<span class="tag tg">${s}</span>`).join('')}</div><button class="copy-bullet" style="margin-top:.625rem;" onclick="navigator.clipboard.writeText('${skills.join(', ')}').then(()=>showToast('📋','Skills copied','Paste into LinkedIn Skills section'))">copy all skills</button></div>`;
+  }
+  if(completed.length===0&&pending.length>0){html='<div style="font-family:var(--mono);font-size:12px;color:var(--text3);">Complete daily tasks in the Daily Plan section to unlock resume bullets. Even finishing Week 3 (calculator service) gives you a solid bullet point.</div>';}
+  view.innerHTML=html;
+}
+
+// ═══ STANDUP LOG ═══
+function saveSU(){
+  const did=document.getElementById('su-did').value.trim();
+  const doing=document.getElementById('su-doing').value.trim();
+  const block=document.getElementById('su-block').value.trim();
+  if(!did&&!doing)return;
+  suHistory.unshift({date:new Date().toLocaleString(),did,doing,block});
+  if(suHistory.length>30)suHistory.pop();
+  saveSUHistory();
+  document.getElementById('su-did').value='';
+  document.getElementById('su-doing').value='';
+  document.getElementById('su-block').value='';
+  renderSUHistory();
+  showToast('📝','Standup saved','Good work logging your progress');
+}
+function renderSUHistory(){
+  const el=document.getElementById('su-history');if(!el)return;
+  if(suHistory.length===0){el.innerHTML='<div style="font-family:var(--mono);font-size:11px;color:var(--text3);">No entries yet. Log your first standup above.</div>';return;}
+  el.innerHTML=suHistory.slice(0,7).map((e,i)=>`
+    <div class="su-entry">
+      <div class="su-date">${e.date}</div>
+      ${e.did?`<div class="su-section"><div class="su-sec-label">Did</div><div class="su-sec-val">${e.did}</div></div>`:''}
+      ${e.doing?`<div class="su-section"><div class="su-sec-label">Doing</div><div class="su-sec-val">${e.doing}</div></div>`:''}
+      ${e.block?`<div class="su-section"><div class="su-sec-label" style="color:var(--red);">Blocker</div><div class="su-sec-val">${e.block}</div></div>`:''}
+    </div>`).join('');
+}
+function exportSU(){
+  const text=suHistory.map(e=>`[${e.date}]\nDid: ${e.did}\nDoing: ${e.doing}\nBlockers: ${e.block||'none'}\n`).join('\n---\n');
+  const blob=new Blob([text],{type:'text/plain'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='ros2_standup_log.txt';a.click();
+}
+
+// ═══ GITHUB STREAK ═══
+async function fetchGH(){
+  const username=document.getElementById('gh-inp').value.trim();if(!username)return;
+  localStorage.setItem('ros2_legendary_gh',username);
+  const cont=document.getElementById('gh-content');
+  cont.innerHTML=`<div style="font-family:var(--mono);font-size:11px;color:var(--text3);">Fetching @${username}...</div>`;
+  try{
+    const resp=await fetch(`https://github-contributions-api.jogruber.de/v4/${username}?y=last`);
+    if(!resp.ok)throw new Error('User not found');
+    const data=await resp.json();const contribs=data.contributions||[];
+    const last91=contribs.slice(-91);
+    const total=last91.reduce((a,d)=>a+d.count,0);
+    let streak=0;for(let i=last91.length-1;i>=0;i--){if(last91[i].count>0)streak++;else break;}
+    const weeks=[];for(let i=0;i<last91.length;i+=7)weeks.push(last91.slice(i,i+7));
+    let hm='<div class="hm">';
+    weeks.forEach(week=>{hm+='<div class="hm-col">';week.forEach(day=>{const l=day.count===0?'':day.count<3?'l1':day.count<5?'l2':day.count<8?'l3':'l4';hm+=`<div class="hm-cell ${l}" title="${day.date}: ${day.count}"></div>`;});hm+='</div>';});
+    hm+='</div>';
+    cont.innerHTML=`<div style="display:flex;gap:.75rem;margin-bottom:.75rem;">
+      <div class="card-sm" style="text-align:center;flex:1;"><div style="font-size:20px;font-weight:700;color:var(--accent);font-family:var(--mono);">${total}</div><div style="font-size:10px;color:var(--text3);">last 90d</div></div>
+      <div class="card-sm" style="text-align:center;flex:1;"><div style="font-size:20px;font-weight:700;color:var(--amber);font-family:var(--mono);">${streak}</div><div style="font-size:10px;color:var(--text3);">day streak</div></div>
+    </div>${hm}<div style="font-family:var(--mono);font-size:9px;color:var(--text3);margin-top:.4rem;">@${username}</div>`;
+  }catch(e){cont.innerHTML=`<div style="font-family:var(--mono);font-size:11px;color:var(--red);">Error: ${e.message}</div>`;}
+}
+
+// ═══ TOAST + CONFETTI ═══
+let toastT=null;
+function showToast(icon,title,sub){
+  const t=document.getElementById('toast');
+  document.getElementById('toast-icon').textContent=icon;
+  document.getElementById('toast-t').textContent=title;
+  document.getElementById('toast-s').textContent=sub;
+  t.classList.add('show');clearTimeout(toastT);
+  toastT=setTimeout(()=>t.classList.remove('show'),3000);
+}
+function fireConfetti(){
+  const canvas=document.getElementById('confetti-canvas');const ctx=canvas.getContext('2d');
+  canvas.width=window.innerWidth;canvas.height=window.innerHeight;
+  const pts=Array.from({length:70},()=>({x:Math.random()*canvas.width,y:-10,vx:(Math.random()-.5)*4,vy:Math.random()*3+2,c:['#00e5a0','#60a5fa','#f59e0b','#8b5cf6','#ef4444'][Math.floor(Math.random()*5)],s:Math.random()*5+3,r:Math.random()*360,rv:(Math.random()-.5)*5}));
+  let af;function step(){ctx.clearRect(0,0,canvas.width,canvas.height);let alive=false;pts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.r+=p.rv;if(p.y<canvas.height+10)alive=true;ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.r*Math.PI/180);ctx.fillStyle=p.c;ctx.fillRect(-p.s/2,-p.s/2,p.s,p.s);ctx.restore();});if(alive)af=requestAnimationFrame(step);else ctx.clearRect(0,0,canvas.width,canvas.height);}
+  af=requestAnimationFrame(step);setTimeout(()=>{cancelAnimationFrame(af);ctx.clearRect(0,0,canvas.width,canvas.height);},4000);
+}
+
+// ═══ NAV + SCROLL ═══
+const SECS=['arch','stack','timeline','skills','projects','nodegraph','terminal','interview','flashcards','snippets','errordecoder','resumebuilder','standup','daily','why','jobs','career','ranks','github'];
+function onScroll(){
+  let active=SECS[0];
+  for(const id of SECS){const el=document.getElementById(id);if(el&&window.scrollY>=el.offsetTop-110)active=id;}
+  document.querySelectorAll('.nav-link').forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+active));
+  document.querySelectorAll('.reveal').forEach(el=>{if(el.getBoundingClientRect().top<window.innerHeight-50)el.classList.add('visible');});
+}
+window.addEventListener('scroll',onScroll,{passive:true});
+
+// ═══ INIT ═══
+document.addEventListener('DOMContentLoaded',()=>{
+  loadState();
+  renderWeekTabs();renderDays();renderWhy();renderGap();renderRanks();renderTopicBtns();
+  renderSnipCats();renderSnips();renderSUHistory();
+  updateRankUI();updateFCUI();
+  setupTerminal();loadGraph('w3');
+  onScroll();
+  document.getElementById('coach-inp')?.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendCoach();}});
+  document.getElementById('lu-overlay')?.addEventListener('click',()=>document.getElementById('lu-overlay').classList.remove('show'));
+  document.addEventListener('keydown',e=>{if(e.key==='/'&&document.activeElement.tagName!=='INPUT'&&document.activeElement.tagName!=='TEXTAREA'){e.preventDefault();document.getElementById('term-inp')?.focus();}});
+  setTimeout(()=>document.querySelectorAll('.reveal').forEach(el=>el.classList.add('visible')),80);
+});
+</script>
+</body>
+</html>
